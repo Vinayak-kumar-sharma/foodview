@@ -1,7 +1,9 @@
 // server start
-const server = require('./src/app.js')
-const {connectDb,pool} = require('./src/db/db.js')
-connectDb();
-server.listen(3000,()=>{
-  console.log("server is running on port localhost:3000")
-})
+import app from './src/app.js';
+import {connectDb} from './src/db/db.js'
+
+await connectDb()
+
+app.listen(3000, () => {
+  console.log('server is running on http://localhost:3000');
+});

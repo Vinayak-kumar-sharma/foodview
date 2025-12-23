@@ -1,6 +1,6 @@
-const { Pool } = require('pg');
+import {Pool} from 'pg'
 
-const pool = new Pool({
+export const pool = new Pool({
   user: 'postgres',
   host:'localhost',
   database:'food-view',
@@ -8,7 +8,7 @@ const pool = new Pool({
   port:5432
 })
 
-const connectDb = async ()=>{
+export const connectDb = async ()=>{
   try{
     const client = await pool.connect();
 
@@ -21,4 +21,3 @@ const connectDb = async ()=>{
   }
 };
 
-module.exports = {pool, connectDb};
