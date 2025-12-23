@@ -1,0 +1,24 @@
+# --- Security & Secrets ---
+.env
+.env.test
+.env.local
+.node_repl_history
+
+# --- Dependencies ---
+node_modules/
+dist/
+build/
+npm-debug.log*
+
+# --- Prisma Specific ---
+# Ignore the local SQLite DB if you use it for testing
+dev.db
+dev.db-journal
+
+# --- Operating System Files ---
+.DS_Store
+Thumbs.db
+
+# --- IDE Settings ---
+.vscode/
+.idea/
