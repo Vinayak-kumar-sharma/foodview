@@ -14,7 +14,4 @@ export async function createTable(){
   } catch (error) {
     console.error('error in creating user table', error.message)
   }
-  finally{
-    await pool.end();
-  }
 }
