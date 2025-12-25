@@ -2,6 +2,9 @@ import { pool } from "../db/db.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
+
+// 1. User Authentication Controllers Register, Login, Logout
+
 export async function registerUser(req, res) {
   try {
     const { name, email, password } = req.body;
@@ -30,11 +33,9 @@ export async function registerUser(req, res) {
     const user = newUser.rows[0];
 
     // 4. Create JWT
-    const token = jwt.sign(
-      { id: user.id },
-      process.env.JWT_KEY,
-      { expiresIn: "1d" }
-    );
+    const token = jwt.sign({ id: user.id }, process.env.JWT_KEY, {
+      expiresIn: "1d",
+    });
 
     // 5. Send response
     res.cookie("token", token);
@@ -49,33 +50,124 @@ export async function registerUser(req, res) {
   }
 }
 
-export async function registerfoodPartner(req, res){
+export async function loginUser(req, res) {
   try {
-    const {name, email, password} = req.body
-    const foodPartnerexist = await pool.query("Select id from foodpatner where email = $1",[email])
-    if(foodPartnerexist.rows.length>0){
-      return res.status(409).json({message:"Food Partner already exists"})
+    const { password, email } = req.body;
+    const dbResult = await pool.query(
+      "SELECT id, password FROM users WHERE email = $1",
+      [email]
+    );
+
+    if (dbResult.rows.length === 0) {
+      return res.status(400).json({ message: "False: Invalid email" });
     }
-    const hashedPassword = await bcrypt.hash(password,10)
-    const newfoodPartner = await pool.query(`INSERT INTO users (name, email, password)
+
+    const user = dbResult.rows[0];
+    const isPassword = await bcrypt.compare(password, user.password);
+    if (!isPassword) {
+      return res.status(400).json({ message: "False: Invalid password" });
+    }
+
+    const token = jwt.sign({ userId: user.id }, process.env.JWT_KEY, {
+      expiresIn: "1d",
+    });
+    res.cookie("token", token, {
+      httpOnly: true,
+      sameSite: "strict",
+      secure: false, // true in production
+    });
+    res.status(201).json({ message: "True: Successful login" });
+  } catch (error) {
+    return res.status(500).json({ message: "Server error" });
+  }
+}
+
+export async function logoutUser(req, res) {
+  try {
+    res.clearCookie("token");
+    res.status(200).json({ message: "True: logout succesfully" });
+  } catch (error) {
+    return res.status(500).json({ mesage: "server error" });
+  }
+}
+
+// 2. Food Partner Authentication Controller Register, Login, Logout 
+
+export async function registerfoodPartner(req, res) {
+  try {
+    const { name, email, password } = req.body;
+
+    const foodPartnerexist = await pool.query("SELECT id FROM users WHERE email = $1", 
+      [email]);
+  
+
+    if (foodPartnerexist.rows.length > 0) {
+      return res.status(409).json({ message: "Food Partner already exists" });
+    }
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newfoodPartner = await pool.query(
+      `INSERT INTO foodpartner (name, email, password)
        VALUES ($1, $2, $3)
        RETURNING id, name, email`,
-      [name, email, hashedPassword])
-    
-      const foodpartner = newfoodPartner.rows[0]
+      [name, email, hashedPassword]
+    );
 
-      const token = jwt.sign({id:foodpartner.id},process.env.JWT_KEY,{expiresIn:"1d"})
+    const foodpartner = newfoodPartner.rows[0];
 
-      res.cookie("token",token)
-      res.status(201).json({
-        message:"Food Partner entry successfull.",
-        foodpartner,
-        token
-      })
+    const token = jwt.sign({ id: foodpartner.id }, process.env.JWT_KEY, {
+      expiresIn: "1d",
+    });
 
+    res.cookie("token", token);
+    res.status(201).json({
+      message: "Food Partner entry successfull.",
+      foodpartner,
+      token,
+    });
   } catch (error) {
     res.status(500).json({
-      message:"server error from food partner"
-    })
+      message: "server error from food partner",
+    });
+  }
+}
+
+export async function logoutfoodPartner(req, res){
+  try{
+    res.clearCookie("token")
+    res.status(200).json({message:"True: Logout Succesfully"})
+  }
+  catch(err){
+    return res.status(500).json({message:"server error food partner logout"})
+  }
+}
+
+export async function loginfoodPartner(req, res){
+  try {
+    const {password, email} = req.body
+
+    const isuserExist = await pool.query(
+      "SELECT id, password FROM foodpartner WHERE email =$1",[email]
+    )
+    if(isuserExist.rows.length === 0){
+      return res.status(400).json({mesage:"False: email not valid"})
+    }
+
+    const user = isuserExist.rows[0]
+
+    const isMatch = await bcrypt.compare(password, user.password)
+
+    if(!isMatch){
+      return res.status(400).json({message:"False : invalid password"})
+    }
+
+    const token = jwt.sign({userId:user.id},process.env.JWT_KEY,{expiresIn:"1d"})
+
+    res.cookie("token", token)
+
+    res.status(200).json({message:"True: Login successfully"})
+
+  } catch (error) {
+    
   }
 }
