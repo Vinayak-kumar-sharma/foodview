@@ -3,8 +3,6 @@ import { v4 as uuid } from "uuid";
 import { pool } from "../db/db.js";
 
 export async function foodItem(req, res) {
-  const foodpartnerId = req.foodpartner.id
-  console.log(foodpartnerId)
   try {
   const { name, description} = req.body
   const foodpartnerId = req.foodpartner.id
@@ -15,8 +13,8 @@ export async function foodItem(req, res) {
     return res.status(400).json({message:"False: name is required"})
   }
   const uploadResult = await uploadFile(req.file.buffer,uuid())
-  const foodId = uuid()
-  const newfoodItem = await pool.query(`INSERT INTO fooditem (name, description, video, foodpartner_id) VALUES ($1,$2,$3,$4) RETURNING *`,[foodId,name, description, uploadResult.url, foodpartnerId])
+  
+  const newfoodItem = await pool.query(`INSERT INTO fooditem (name, description, video, foodpartner_id) VALUES ($1,$2,$3,$4) RETURNING *`,[name, description, uploadResult.url, foodpartnerId])
   
   const newitem = newfoodItem.rows[0]
 
