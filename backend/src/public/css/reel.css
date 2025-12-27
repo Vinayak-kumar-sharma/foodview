@@ -1,253 +1,148 @@
-/* * {
+/* ===== Base / Mobile First ===== */
+html, body {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-}
-
-html, body {
-    width: 100%;
     height: 100%;
-    overflow: hidden;
-    background: #000;
+    width: 100%;
     font-family: Arial, sans-serif;
+    background: #000;
+    color: #fff;
+    overflow: hidden;
 }
 
+/* ===== Reels Container ===== */
 .reels-container {
-    height: 100dvh; 
+    height: 100dvh; /* full device viewport */
     width: 100%;
     overflow-y: scroll;
     scroll-snap-type: y mandatory;
-    scrollbar-width: none;
+    background: #000;
+    padding-bottom: 60px;
+    scroll-behavior: smooth;  /* space for bottom nav */
 }
 
+/* Hide scrollbar for clean look */
 .reels-container::-webkit-scrollbar {
     display: none;
 }
 
-
+/* ===== Each Reel ===== */
 .reel {
     position: relative;
-    height: 100dvh;
     width: 100%;
+    height: 100dvh; /* full screen minus nav already padded */
     scroll-snap-align: start;
+    overflow: hidden;
+
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
+    background: #000;
 }
 
-
+/* ===== VIDEO ===== */
 .reel video {
     width: 100%;
     height: 100%;
-    object-fit: cover; 
+    object-fit: cover; /* fill screen, crop minimal sides */
+    display: block;
 }
 
-
+/* ===== Bottom-left overlay (description, buttons) ===== */
 .bottom-left-overlay {
     position: absolute;
-    bottom: 20px;
+    bottom: 80px; /* above bottom nav */
     left: 15px;
     color: #fff;
     max-width: 70%;
-}
-
-.bottom-left-overlay h4 {
-    font-size: 16px;
-    margin-bottom: 5px;
-}
-
-.bottom-left-overlay p {
     font-size: 14px;
-    margin-bottom: 8px;
+    z-index: 10;
 }
 
-.bottom-left-overlay button {
-    padding: 6px 12px;
-    background: #ff4500;
-    border: none;
-    border-radius: 4px;
-    color: #fff;
-    font-size: 14px;
-    cursor: pointer;
-}
-
-
+/* ===== Right vertical icons ===== */
 .right-icons {
     position: absolute;
-    top: 50%;
     right: 10px;
-    transform: translateY(-50%);
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    font-size: 24px;
-    color: #fff;
-}
-
-.bottom-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 55px; 
-    background: rgba(0, 0, 0, 0.5); 
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    z-index: 1000;
-}
-
-
-.bottom-nav .nav-item {
+    bottom: 80px; /* above bottom nav */
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    color: #fff;
-    font-size: 12px;
-    cursor: pointer;
+    gap: 16px;
+    z-index: 10;
 }
 
-.bottom-nav .nav-item span {
-    font-size: 18px; 
-    margin-bottom: 2px;
-}
-.bottom-left-overlay {
-    position: absolute;
-    bottom: 65px; 
-    left: 15px;
-    color: #fff;
-    max-width: 75%;
-} */
-
-html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
-    font-family: Arial, sans-serif;
-    background: #000;
-    color: #fff;
-    overflow: hidden;
-}
-
-/* Container for all reels */
-.reels-container {
-    height: 100dvh; /* full device viewport height */
-    width: 100%;
-    overflow-y: scroll;
-    scroll-snap-type: y mandatory;
-}
-
-/* Each reel */
-/* Each reel */
-.reel {
-    position: relative;
-    width: 100%;
-    height: 100dvh; /* full screen height */
-    scroll-snap-align: start;
-    display: flex;
-    justify-content: center; /* center horizontally */
-    align-items: center;
-    overflow: hidden;
-}
-
-/* Video fills container vertically but keeps aspect ratio */
-.reel video {
-    height: 100%; /* fill vertical height */
-    aspect-ratio: 9 / 16; /* vertical video ratio */
-    object-fit: cover; /* crop edges if needed */
-    max-width: 400px; /* optional: max width for large screens */
-    border-radius: 8px; /* optional: rounded corners */
-}
-
-
-/* Video fills container */
-
-
-/* Bottom-left overlay: description + Visit Store button */
-.bottom-left-overlay {
-    position: absolute;
-    bottom: 70px; /* above bottom nav */
-    left: 15px;
-    color: #fff;
-    max-width: 75%;
-}
-
-/* Right vertical icons */
-.right-icons {
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    font-size: 20px; /* small, balanced */
-}
-
-/* Fixed bottom nav */
-.bottom-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 55px;
-    background: rgba(0,0,0,0.5); /* lighter for video visibility */
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    z-index: 1000;
-}
-
-.bottom-nav .nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-size: 12px;
-    color: #fff;
-}
-
-.bottom-nav .nav-item span {
-    font-size: 18px;
-    margin-bottom: 2px;
-}
-
-/* Optional: prevent nav from covering scrollable content */
-.reels-container {
-    padding-bottom: 55px; /* same as nav height */
-}
-body, .reels-container {
-    background-color: #000; /* black bars on sides */
-}
 .right-icons button {
-  display: block;
-  background: rgba(0,0,0,0.3);
-  border: none;
-  border-radius: 50%;
-  padding: 10px;
-  margin: 8px 0;
-  font-size: 20px;
-  color: white;
-  cursor: pointer;
-  transition: all 0.2s ease;
+    display: block;
+    background: rgba(0,0,0,0.3);
+    border: none;
+    border-radius: 50%;
+    padding: 12px;
+    font-size: 20px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
 .right-icons button:hover,
 .right-icons button:active {
-  transform: scale(1.2);
-  background: rgba(0,0,0,0.5);
+    transform: scale(1.2);
+    background: rgba(0,0,0,0.5);
 }
 
 .right-icons button:focus {
-  outline: none;
+    outline: none;
 }
-.right-icons {
-  position: absolute;
-  right: 10px;
-  bottom: 60px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+
+/* ===== Bottom Navigation ===== */
+.bottom-nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background: rgba(0,0,0,0.5);
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 50px;
+}
+
+.bottom-nav .nav-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    color: #fff;
+    font-size: 12px; /* text size */
+    gap: 2px;        /* small gap between icon and text */
+}
+
+.bottom-nav .nav-item p {
+    margin: 0;
+    font-size: 10px;
+}
+
+/* ===== Tablet (768px +) ===== */
+@media (min-width: 768px) {
+    .bottom-nav {
+        height: 70px;
+    }
+    .right-icons button {
+        padding: 14px;
+        font-size: 22px;
+    }
+}
+
+/* ===== Desktop (1024px +) ===== */
+@media (min-width: 1024px) {
+    .reel video {
+        max-width: 420px;
+        max-height: 100%;
+    }
+    .bottom-nav {
+        height: 80px;
+    }
+    .right-icons button {
+        padding: 16px;
+        font-size: 24px;
+    }
 }

@@ -18,14 +18,16 @@ export async function foodItem(req, res) {
   
   const newitem = newfoodItem.rows[0]
 
-  res.status(200).json({message:"True : food-item creeated successfully"},{newitem})
+  res.status(200).redirect("/api/store")
 
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error fooditem" });
   }
 }
-
+export async function addfooditem(req, res) {
+  res.render("fooditem")
+}
 export async function getfoodItem(req, res){
   try {
     const foodItems = await pool.query(
@@ -47,8 +49,40 @@ export async function getfoodItem(req, res){
 }
 
 export async function getfoodbyId(req,res) {
-  const {id} = req.params
-  const result = await pool.query("SELECT * from foodpartner where id = $1",[id])
+  try {
+    const foodpartnerId = req.foodpartner.id
 
-  res.render("visitstore",({store: result.rows[0]}))
+    const statsQuery = `select f.id, f.name, count(distinct i.id) as total_meals, count(l.id) as total_likes from foodpartner as f left join fooditem as i on f.id = i.foodpartner_id left join likes as l on i.id = l.reel_id where f.id = $1 group by f.id, f.name;`;
+
+    const videoQuery = `select name, video, description from fooditem where foodpartner_id = $1`;
+
+    const stats = await pool.query(statsQuery,[foodpartnerId])
+
+    const videos = await pool.query(videoQuery,[foodpartnerId])
+
+    res.render("visitstore",{partner:stats.rows[0], video:videos.rows})
+
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({message:"server error from getfoodbyid"})
+  }
+}
+export async function getstorebyId(req,res) {
+  try {
+    const foodpartnerId = req.params.id
+
+    const statsQuery = `select f.id, f.name, count(distinct i.id) as total_meals, count(l.id) as total_likes from foodpartner as f left join fooditem as i on f.id = i.foodpartner_id left join likes as l on i.id = l.reel_id where f.id = $1 group by f.id, f.name;`;
+
+    const videoQuery = `select name, video, description from fooditem where foodpartner_id = $1`;
+
+    const stats = await pool.query(statsQuery,[foodpartnerId])
+
+    const videos = await pool.query(videoQuery,[foodpartnerId])
+
+    res.render("visitstore",{partner:stats.rows[0], video:videos.rows})
+
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({message:"server error from getfoodbyid"})
+  }
 }

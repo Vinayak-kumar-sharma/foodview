@@ -85,7 +85,7 @@ export async function loginUser(req, res) {
 export async function logoutUser(req, res) {
   try {
     res.clearCookie("token");
-    res.status(200).redirect("/user/login");
+    res.status(200).redirect("/");
   } catch (error) {
     return res.status(500).json({ mesage: "server error" });
   }
@@ -123,7 +123,7 @@ export async function registerfoodPartner(req, res) {
     });
 
     res.cookie("token", token);
-    res.status(201).redirect("/api/store")
+    res.status(201).redirect("/api/foodpartner/login")
   } catch (error) {
     res.status(500).json({
       message: "server error from food partner",
@@ -133,13 +133,10 @@ export async function registerfoodPartner(req, res) {
 export async function getpartnerLogin(req, res){
   res.render("foodpartnerLogin")
 }
-export async function getStore(req, res) {
-  res.render("visitstore")
-}
 export async function logoutfoodPartner(req, res){
   try{
     res.clearCookie("token")
-    res.status(200).json({message:"True: Logout Succesfully"})
+    res.status(200).redirect("/")
   }
   catch(err){
     return res.status(500).json({message:"server error food partner logout"})
@@ -167,6 +164,7 @@ export async function loginfoodPartner(req, res){
 
     res.cookie("token", token)
     res.status(200).redirect("/api/store")
+
 
   } catch (error) {
     console.error(error)

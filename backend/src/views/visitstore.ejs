@@ -10,44 +10,76 @@
 
 <div class="store-container">
 
-    <!-- Top section: profile + name -->
-    <div class="profile-section">
+    <!-- Top bar: profile + actions -->
+    <div class="top-bar">
+    <div class="profile-info">
         <img src="../images/pic.jpeg" alt="Profile Picture" class="profile-pic">
         <h2 class="partner-name">@FoodPartnerName</h2>
     </div>
+    <div class="actions">
+        <a href="/api/home" class="action-btn">Home</a>
+        <a href="/api/fooditem" class="action-btn upload-btn">Upload</a>
+        <a href="/api/foodpartner/logout" class="action-btn logout">Logout</a>
+    </div>
+</div>
+
 
     <!-- Stats section -->
     <div class="stats-section">
         <div class="stat">
-            <h3>120</h3>
+            <h3><%= partner.total_meals %></h3>
             <p>Meals</p>
         </div>
         <div class="stat">
-            <h3>450</h3>
+            <h3><%= partner.total_likes %></h3>
             <p>Likes</p>
         </div>
     </div>
 
-    <!-- Video list (vertical videos, like TikTok) -->
-    <!-- <div class="video-list">
-        <div class="video-item"><video src="../videos/01video.mp4" autoplay muted loop></video></div>
-        <div class="video-item"><video src="../videos/03video.mp4" autoplay muted loop></video></div>
-        <div class="video-item"><video src="../videos/04video.mp4" autoplay muted loop></video></div>
-        <div class="video-item"><video src="../videos/02video.mp4" autoplay muted loop></video></div>
-        <div class="video-item"><video src="../videos/03video.mp4" autoplay muted loop></video></div>
-        <div class="video-item"><video src="../videos/01video.mp4" autoplay muted loop></video></div>
-        
-    </div> -->
+    <!-- Video grid section -->
     <div class="video-grid">
-        <div class="video-item"><video src="../videos/01video.mp4" autoplay muted loop></video></div>
-        <div class="video-item"><video src="../videos/02video.mp4" autoplay muted loop></video></div>
-        <div class="video-item"><video src="../videos/04video.mp4" autoplay muted loop></video></div>
-        <div class="video-item"><video src="../videos/02video.mp4" autoplay muted loop></video></div>
-        <div class="video-item"><video src="../videos/03video.mp4" autoplay muted loop></video></div>
-        <div class="video-item"><video src="../videos/04video.mp4" autoplay muted loop></video></div>
-    </div>
+    <% if (video.length === 0) { %>
+        <p class="no-videos">No videos uploaded yet.</p>
+    <% } else { %>
+        <% video.forEach(v => { %>
+            <div class="video-item">
+                <video 
+                    src="<%= v.video %>" 
+                    autoplay 
+                    muted 
+                    loop 
+                    playsinline
+                    preload="metadata"
+                    class="reel-video"
+                ></video>
+                <div class="video-info">
+                    <p><%= v.description %></p>
+                </div>
+            </div>
+        <% }) %>
+    <% } %>
+</div>
+
 
 </div>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const videos = document.querySelectorAll(".reel-video");
+
+    videos.forEach(video => {
+        video.addEventListener("click", () => {
+            // Mute all other videos
+            videos.forEach(v => {
+                if (v !== video) v.muted = true;
+            });
+
+            // Toggle current video sound
+            video.muted = !video.muted;
+            video.volume = 1;
+        });
+    });
+});
+</script>
 
 </body>
 </html>
