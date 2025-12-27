@@ -1,0 +1,223 @@
+/* * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #000;
+    font-family: Arial, sans-serif;
+}
+
+.reels-container {
+    height: 100dvh; 
+    width: 100%;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+    scrollbar-width: none;
+}
+
+.reels-container::-webkit-scrollbar {
+    display: none;
+}
+
+
+.reel {
+    position: relative;
+    height: 100dvh;
+    width: 100%;
+    scroll-snap-align: start;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+
+.reel video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+}
+
+
+.bottom-left-overlay {
+    position: absolute;
+    bottom: 20px;
+    left: 15px;
+    color: #fff;
+    max-width: 70%;
+}
+
+.bottom-left-overlay h4 {
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.bottom-left-overlay p {
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.bottom-left-overlay button {
+    padding: 6px 12px;
+    background: #ff4500;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+
+.right-icons {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-size: 24px;
+    color: #fff;
+}
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 55px; 
+    background: rgba(0, 0, 0, 0.5); 
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 1000;
+}
+
+
+.bottom-nav .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.bottom-nav .nav-item span {
+    font-size: 18px; 
+    margin-bottom: 2px;
+}
+.bottom-left-overlay {
+    position: absolute;
+    bottom: 65px; 
+    left: 15px;
+    color: #fff;
+    max-width: 75%;
+} */
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    font-family: Arial, sans-serif;
+    background: #000;
+    color: #fff;
+    overflow: hidden;
+}
+
+/* Container for all reels */
+.reels-container {
+    height: 100dvh; /* full device viewport height */
+    width: 100%;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+}
+
+/* Each reel */
+/* Each reel */
+.reel {
+    position: relative;
+    width: 100%;
+    height: 100dvh; /* full screen height */
+    scroll-snap-align: start;
+    display: flex;
+    justify-content: center; /* center horizontally */
+    align-items: center;
+    overflow: hidden;
+}
+
+/* Video fills container vertically but keeps aspect ratio */
+.reel video {
+    height: 100%; /* fill vertical height */
+    aspect-ratio: 9 / 16; /* vertical video ratio */
+    object-fit: cover; /* crop edges if needed */
+    max-width: 400px; /* optional: max width for large screens */
+    border-radius: 8px; /* optional: rounded corners */
+}
+
+
+/* Video fills container */
+
+
+/* Bottom-left overlay: description + Visit Store button */
+.bottom-left-overlay {
+    position: absolute;
+    bottom: 70px; /* above bottom nav */
+    left: 15px;
+    color: #fff;
+    max-width: 75%;
+}
+
+/* Right vertical icons */
+.right-icons {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    font-size: 20px; /* small, balanced */
+}
+
+/* Fixed bottom nav */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 55px;
+    background: rgba(0,0,0,0.5); /* lighter for video visibility */
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 1000;
+}
+
+.bottom-nav .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 12px;
+    color: #fff;
+}
+
+.bottom-nav .nav-item span {
+    font-size: 18px;
+    margin-bottom: 2px;
+}
+
+/* Optional: prevent nav from covering scrollable content */
+.reels-container {
+    padding-bottom: 55px; /* same as nav height */
+}
+body, .reels-container {
+    background-color: #000; /* black bars on sides */
+}

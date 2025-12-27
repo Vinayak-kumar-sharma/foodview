@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home | Reels</title>
+    <link rel="stylesheet" href="/css/reel.css">
+</head>
+<body>
+
+<div class="reels-container">
+
+    <% reels.forEach(reel => { %>
+        <div class="reel">
+
+            <video src="<%= reel.video %>" autoplay muted loop></video>
+
+            <!-- Bottom-left overlay -->
+            <div class="bottom-left-overlay">
+                <h4>@<%= reel.name %></h4>
+                <p><%= reel.description %></p>
+
+                <a href="/api/store/<%= reel.partner_id %>">
+                    <button>Visit Store</button>
+                </a>
+            </div>
+
+            <!-- Right vertical icons -->
+            <div class="right-icons">
+                <span>❤️</span>
+                <span>💬</span>
+                <span>💾</span>
+            </div>
+
+        </div>
+    <% }) %>
+
+</div>
+
+<!-- FIXED FULL-WIDTH BOTTOM NAV -->
+<div class="bottom-nav">
+    <div class="nav-item">
+        <span>🏠</span>
+        <p>Home</p>
+    </div>
+    <div class="nav-item">
+        <span>💾</span>
+        <p>Saved</p>
+    </div>
+</div>
+
+</body>
+</html>

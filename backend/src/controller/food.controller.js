@@ -25,3 +25,29 @@ export async function foodItem(req, res) {
     res.status(500).json({ message: "Server error fooditem" });
   }
 }
+
+export async function getfoodItem(req, res){
+  try {
+    const foodItems = await pool.query(
+      `SELECT
+        f.name,
+        f.video,
+        f.description,
+        p.id AS partner_id,
+        p.name
+      FROM fooditem f
+      JOIN foodpartner p ON f.foodpartner_id = p.id
+      ORDER BY f.id DESC`
+      )
+    res.render("home", { reels: foodItems.rows });
+  } catch (error) {
+    return res.status(500).json({message:"Server Error"})
+  }
+}
+
+export async function getfoodbyId(req,res) {
+  const {id} = req.params
+  const result = await pool.query("SELECT * from foodpartner where id = $1",[id])
+
+  res.render("visitstore",({store: result.rows[0]}))
+}

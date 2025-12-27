@@ -5,6 +5,9 @@ import jwt from "jsonwebtoken";
 
 // 1. User Authentication Controllers Register, Login, Logout
 
+export async function getuser(req,res){
+  res.render('index')
+}
 export async function registerUser(req, res) {
   try {
     const { name, email, password } = req.body;
@@ -39,17 +42,15 @@ export async function registerUser(req, res) {
 
     // 5. Send response
     res.cookie("token", token);
-    res.status(201).json({
-      message: "User registered successfully",
-      user,
-      token,
-    });
+    res.status(201).redirect("/api/home")
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
   }
 }
-
+export async function getLogin(req, res) {
+  res.render("userLogin")
+}
 export async function loginUser(req, res) {
   try {
     const { password, email } = req.body;
@@ -76,16 +77,15 @@ export async function loginUser(req, res) {
       sameSite: "strict",
       secure: false, // true in production
     });
-    res.status(201).json({ message: "True: Successful login" });
+    res.status(201).redirect("/api/home");
   } catch (error) {
     return res.status(500).json({ message: "Server error" });
   }
 }
-
 export async function logoutUser(req, res) {
   try {
     res.clearCookie("token");
-    res.status(200).json({ message: "True: logout succesfully" });
+    res.status(200).redirect("/user/login");
   } catch (error) {
     return res.status(500).json({ mesage: "server error" });
   }
@@ -93,6 +93,9 @@ export async function logoutUser(req, res) {
 
 // 2. Food Partner Authentication Controller Register, Login, Logout 
 
+export async function getpartner(req,res) {
+  res.render("foodPartnerregister")
+}
 export async function registerfoodPartner(req, res) {
   try {
     const { name, email, password } = req.body;
@@ -120,18 +123,19 @@ export async function registerfoodPartner(req, res) {
     });
 
     res.cookie("token", token);
-    res.status(201).json({
-      message: "Food Partner entry successfull.",
-      foodpartner,
-      token,
-    });
+    res.status(201).redirect("/api/store")
   } catch (error) {
     res.status(500).json({
       message: "server error from food partner",
     });
   }
 }
-
+export async function getpartnerLogin(req, res){
+  res.render("foodpartnerLogin")
+}
+export async function getStore(req, res) {
+  res.render("visitstore")
+}
 export async function logoutfoodPartner(req, res){
   try{
     res.clearCookie("token")
@@ -141,7 +145,6 @@ export async function logoutfoodPartner(req, res){
     return res.status(500).json({message:"server error food partner logout"})
   }
 }
-
 export async function loginfoodPartner(req, res){
   try {
     const {password, email} = req.body
@@ -160,14 +163,13 @@ export async function loginfoodPartner(req, res){
     if(!isMatch){
       return res.status(400).json({message:"False : invalid password"})
     }
-
     const token = jwt.sign({userId:user.id},process.env.JWT_KEY,{expiresIn:"1d"})
 
     res.cookie("token", token)
-
-    res.status(200).json({message:"True: Login successfully"})
+    res.status(200).redirect("/api/store")
 
   } catch (error) {
-    
+    console.error(error)
+    res.status(500).json({message:"server error"})
   }
 }

@@ -1,0 +1,85 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    background-color: #111; /* black background */
+    color: #fff; /* white text */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* Center form without card */
+.form-wrapper {
+    width: 100%;
+    max-width: 400px;
+}
+
+/* Headings */
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 2rem;
+}
+
+/* Labels */
+form label {
+    display: block;
+    margin: 10px 0 5px;
+    font-size: 14px;
+    color: #ccc;
+}
+
+/* Inputs */
+form input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #444;
+    border-radius: 6px;
+    background-color: #222;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+form input::placeholder {
+    color: #888;
+}
+
+/* Buttons */
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background-color: #fff;
+    color: #000;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background-color: #ddd;
+}
+
+/* Links */
+.link {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.link a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 14px;
+}
+
+.link a:hover {
+    color: #bbb;
+}

@@ -4,11 +4,17 @@ import {connectDb} from './src/db/db.js'
 import { createTable } from './src/models/user.model.js';
 import { foodPartner } from './src/models/foodpartner.model.js';
 import { foodItem } from './src/models/food.model.js';
+import { userSaveTable } from './src/models/userSave.model.js';
+import { reelLike } from './src/models/like.model.js';
+import { commentTable } from './src/models/comment.model.js';
 
 await connectDb()
 await createTable()
 await foodPartner()
 await foodItem()
+await userSaveTable()
+await reelLike()
+await commentTable()
 app.listen(3000, () => {
   console.log('server is running on http://localhost:3000');
 });

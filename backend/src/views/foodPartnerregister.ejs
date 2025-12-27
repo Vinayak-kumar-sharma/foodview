@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Partner Registration</title>
+    <link rel="stylesheet" href="/css/common.css">
+</head>
+<body>
+
+<div class="form-wrapper">
+    <h2>Food Partner Registration</h2>
+    <form action="/api/foodpartner/register" method="POST">
+        <label>Restaurant Name</label>
+        <input type="text" name="name" placeholder="Enter restaurant name" required>
+
+        <label>Email</label>
+        <input type="email" name="email" placeholder="Enter your email" required>
+
+        <label>Password</label>
+        <input type="password" name="password" placeholder="Enter your password" required>
+
+        <button type="submit">Register</button>
+    </form>
+    <div class="link">
+        <a href="/api/foodpartner/login">Already registered? Login</a>
+    </div>
+</div>
+
+</body>
+</html>

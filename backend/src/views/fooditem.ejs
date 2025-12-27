@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Upload Food Reel</title>
+<link rel="stylesheet" href="../css/item.css">
+</head>
+<body>
+
+<div class="form-container">
+  <h2>Upload Your Food Reel</h2>
+  
+  <form id="foodForm" action="/api/fooditem" method="POST" enctype="multipart/form-data">
+    
+    <!-- Food Name -->
+    <label for="name">Food Name</label>
+    <input type="text" id="name" name="name" placeholder="e.g., Spicy Momos" required>
+
+    <!-- Video Upload -->
+    <label for="video">Upload Video</label>
+    <input type="file" id="video" name="video" accept="video/*" required>
+    
+    <!-- Video Preview -->
+    <div class="video-preview" id="videoPreview">
+      <p>No video selected</p>
+    </div>
+
+    <!-- Description -->
+    <label for="description">Description</label>
+    <textarea id="description" name="description" rows="4" placeholder="Enter a short description..." required></textarea>
+
+    <button type="submit">Submit</button>
+  </form>
+</div>
+
+<script>
+  const videoInput = document.getElementById('video');
+  const videoPreview = document.getElementById('videoPreview');
+
+  videoInput.addEventListener('change', () => {
+    const file = videoInput.files[0];
+    if(file){
+      const url = URL.createObjectURL(file);
+      videoPreview.innerHTML = `<video src="${url}" controls width="100%" autoplay muted loop></video>`;
+    } else {
+      videoPreview.innerHTML = '<p>No video selected</p>';
+    }
+  });
+</script>
+
+</body>
+</html>
