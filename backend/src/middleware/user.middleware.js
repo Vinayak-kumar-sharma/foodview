@@ -8,8 +8,7 @@ export async function authUsermiddleware(req, res, next){
       return res.status(400).json({message:"False : token required"})
     }
     const decoded = jwt.verify(token, process.env.JWT_KEY)
-    const user = await pool.query("SELECT * from users where id = $1",[decoded.userId])
-    req.user = user
+    req.user = {id:decoded.userId}
     next()
   } catch (error) {
     console.error(error)

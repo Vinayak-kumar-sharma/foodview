@@ -1,53 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home | Reels</title>
     <link rel="stylesheet" href="/css/reel.css">
 </head>
+
 <body>
 
-<div class="reels-container">
+    <div class="reels-container">
 
-    <% reels.forEach(reel => { %>
-        <div class="reel">
+        <% reels.forEach(reel=> { %>
+            <div class="reel" data-reel-id="<%= reel.id %>">
+                <video src="<%= reel.video %>" autoplay muted loop></video>
 
-            <video src="<%= reel.video %>" autoplay muted loop></video>
+                <div class="bottom-left-overlay">
+                    <h4>@<%= reel.reel_name %>
+                    </h4>
+                    <p>
+                        <%= reel.description %>
+                    </p>
 
-            <!-- Bottom-left overlay -->
-            <div class="bottom-left-overlay">
-                <h4>@<%= reel.name %></h4>
-                <p><%= reel.description %></p>
+                    <a href="/api/store/<%= reel.partner_id %>">
+                        <button>
+                            <%= reel.partner_name %> Store
+                        </button>
+                    </a>
+                </div>
 
-                <a href="/api/store/<%= reel.partner_id %>">
-                    <button>Visit Store</button>
-                </a>
+                <div class="right-icons">
+                    <button class="like-btn" aria-label="Like">❤️</button>
+                    <button class="comment-btn" aria-label="Comment">💬</button>
+                    <button class="save-btn" aria-label="Save">💾</button>
+                </div>
+
             </div>
+            <% }) %>
 
-            <!-- Right vertical icons -->
-            <div class="right-icons">
-                <span>❤️</span>
-                <span>💬</span>
-                <span>💾</span>
-            </div>
 
+    </div>
+
+    <!-- FIXED FULL-WIDTH BOTTOM NAV -->
+    <div class="bottom-nav">
+        <div class="nav-item">
+            <span>🏠</span>
+            <p>Home</p>
         </div>
-    <% }) %>
-
-</div>
-
-<!-- FIXED FULL-WIDTH BOTTOM NAV -->
-<div class="bottom-nav">
-    <div class="nav-item">
-        <span>🏠</span>
-        <p>Home</p>
+        <div class="nav-item">
+            <span>💾</span>
+            <p>Saved</p>
+        </div>
     </div>
-    <div class="nav-item">
-        <span>💾</span>
-        <p>Saved</p>
-    </div>
-</div>
 
 </body>
+<script src="/js/script.js"></script>
 </html>

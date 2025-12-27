@@ -30,11 +30,12 @@ export async function getfoodItem(req, res){
   try {
     const foodItems = await pool.query(
       `SELECT
-        f.name,
+        f.id,
+        f.name as reel_name,
         f.video,
         f.description,
         p.id AS partner_id,
-        p.name
+        p.name as partner_name
       FROM fooditem f
       JOIN foodpartner p ON f.foodpartner_id = p.id
       ORDER BY f.id DESC`

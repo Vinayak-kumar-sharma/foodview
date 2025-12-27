@@ -7,6 +7,7 @@ import { fileURLToPath } from "url";
 
 import userRoute from "./routes/auth.route.js";
 import foodRoute from "./routes/food.route.js";
+import profileRoute from "./routes/profile.routes.js"
 
 const app = express();
 dotenv.config();
@@ -31,5 +32,6 @@ app.get("/",(req, res)=>{
 })
 app.use("/api", userRoute);
 app.use("/api", foodRoute);
+app.use("/user", profileRoute);
 
 export default app;

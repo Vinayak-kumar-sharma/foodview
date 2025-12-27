@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile</title>
+  <link rel="stylesheet" href="/css/profile.css">
+</head>
+
+<body>
+
+<!-- PROFILE HEADER -->
+<div class="profile-header">
+  <!-- LEFT: USER INFO -->
+  <div class="user-info">
+    <div class="username"><%= user.name %></div>
+    <div class="email"><%= user.email %></div>
+  </div>
+
+  <!-- RIGHT: ACTIONS -->
+  <div class="header-actions">
+    <a href="/api/home" class="header-link">🏠 Home</a>
+
+    <form action="/api/user/logout" method="GET">
+      <button type="submit" class="logout-btn">🚪 Logout</button>
+    </form>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab-btn active" data-tab="saved">Saved</button>
+  <button class="tab-btn" data-tab="comments">Comments</button>
+</div>
+
+<div class="tab-content">
+  <!-- Saved Reels -->
+  <div id="saved" class="tab-panel active">
+    <% if (savedReels.length > 0) { %>
+      <div class="saved-grid">
+        <% savedReels.forEach(reel => { %>
+          <div class="card">
+            <video src="<%= reel.video %>" class="video" autoplay muted loop></video>
+          </div>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <div class="empty">No saved reels yet.</div>
+    <% } %>
+  </div>
+
+  <!-- Comments -->
+  <div id="comments" class="tab-panel">
+    <% if (comments.length > 0) { %>
+      <% comments.forEach(comment => { %>
+        <div class="card">
+          <div class="comment-text">
+            <strong><%= comment.username %>:</strong> <%= comment.comment_text %>
+          </div>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <div class="empty">No comments yet.</div>
+    <% } %>
+  </div>
+</div>
+
+</body>
+</html>

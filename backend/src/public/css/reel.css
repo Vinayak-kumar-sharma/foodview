@@ -221,3 +221,33 @@ html, body {
 body, .reels-container {
     background-color: #000; /* black bars on sides */
 }
+.right-icons button {
+  display: block;
+  background: rgba(0,0,0,0.3);
+  border: none;
+  border-radius: 50%;
+  padding: 10px;
+  margin: 8px 0;
+  font-size: 20px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.right-icons button:hover,
+.right-icons button:active {
+  transform: scale(1.2);
+  background: rgba(0,0,0,0.5);
+}
+
+.right-icons button:focus {
+  outline: none;
+}
+.right-icons {
+  position: absolute;
+  right: 10px;
+  bottom: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
