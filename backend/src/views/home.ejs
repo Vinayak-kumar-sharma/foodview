@@ -12,36 +12,61 @@
 
     <div class="reels-container">
 
-        <% reels.forEach(reel=> { %>
-            <div class="reel" data-reel-id="<%= reel.id %>">
-                <video src="<%= reel.video %>" autoplay muted loop class="reel-video"></video>
+<% reels.forEach(reel => { %>
+  <div class="reel" data-reel-id="<%= reel.id %>">
 
-                <div class="bottom-left-overlay">
-                    <h4>@<%= reel.reel_name %>
-                    </h4>
-                    <p>
-                        <%= reel.description %>
-                    </p>
+    <!-- VIDEO -->
+    <div class="video-wrapper">
+      <video src="<%= reel.video %>" autoplay muted loop class="reel-video"></video>
+    </div>
 
-                    <a href="/api/store/<%= reel.partner_id %>">
-                        <button>
-                            <%= reel.partner_name %> Store
-                        </button>
-                    </a>
-                </div>
+    <!-- INFO -->
+    <div class="bottom-left-overlay">
+      <h4>@<%= reel.reel_name %></h4>
+      <p><%= reel.description %></p>
 
-                <div class="right-icons">
-                    <button class="like-btn" aria-label="Like">❤️</button>
-                    <button class="comment-btn" aria-label="Comment">💬</button>
-                    <button class="save-btn" aria-label="Save">💾</button>
-                </div>
+      <a href="/api/store/<%= reel.partner_id %>">
+        <button><%= reel.partner_name %> Store</button>
+      </a>
+    </div>
 
-            </div>
-            <% }) %>
+    <!-- ICONS -->
+    <div class="right-icons">
+      <button class="like-btn">❤️</button>
+      <button class="comment-btn">💬</button>
+      <button class="save-btn">💾</button>
+    </div>
 
+    <!-- MOBILE COMMENT SHEET -->
+    <div class="comment-sheet">
+
+      <div class="comment-header">
+        <span>Comments</span>
+        <button class="close-comment">✕</button>
+      </div>
+
+      <div class="comment-list">
+        <!-- comments injected here -->
+      </div>
+
+      <form class="comment-form">
+        <input
+          type="text"
+          placeholder="Add a comment…"
+          name="comment"
+          required
+        />
+        <button type="submit">Post</button>
+      </form>
 
     </div>
 
+  </div>
+<% }) %>
+
+</div>
+
+    
     <!-- FIXED FULL-WIDTH BOTTOM NAV -->
     <div class="bottom-nav">
     <a href="/api/home" class="nav-item">
@@ -54,74 +79,7 @@
     </a>
 </div>
 
-
 </body>
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-    const videos = document.querySelectorAll(".reel video");
-
-    // Mute all videos initially
-    videos.forEach(video => video.muted = true);
-
-    // Intersection Observer for handling video play/pause on scroll
-    const options = {
-        root: null,  // viewport
-        rootMargin: "0px",
-        threshold: 0.6  // 60% visible to start video
-    };
-
-    const handleIntersect = (entries) => {
-        entries.forEach(entry => {
-            const video = entry.target;
-            if (entry.isIntersecting) {
-                // Play the video
-                video.play().catch(err => console.log("Autoplay blocked:", err));
-                // Unmute the active video
-                video.muted = false;
-
-                // Add tap-to-toggle audio
-                video.addEventListener("click", toggleMute);
-            } else {
-                // Pause video and mute it
-                video.pause();
-                video.muted = true;
-
-                // Remove tap-to-toggle audio
-                video.removeEventListener("click", toggleMute);
-            }
-        });
-    };
-
-    const toggleMute = (event) => {
-        const video = event.target;
-        video.muted = !video.muted;  // toggle mute/unmute
-    };
-
-    const observer = new IntersectionObserver(handleIntersect, options);
-
-    // Observe each video
-    videos.forEach(video => observer.observe(video));
-
-    // Scroll debounce logic to smooth out video skipping on scroll
-    let isScrolling = false;
-    let scrollTimeout;
-
-    const debounceScroll = () => {
-        if (isScrolling) return;
-
-        isScrolling = true;
-
-        // After a delay (to let scrolling finish), start the scroll event
-        scrollTimeout = setTimeout(() => {
-            isScrolling = false;
-        }, 100);  // adjust timeout as needed for smoothness
-    };
-
-    // Add scroll listener with debounce
-    document.querySelector('.reels-container').addEventListener('scroll', debounceScroll);
-});
-
-</script>
 
 <script src="/js/script.js"></script>
 </html>

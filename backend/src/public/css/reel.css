@@ -1,4 +1,8 @@
 /* ===== Base / Mobile First ===== */
+:root {
+    --bottom-nav-height: 50px;
+}
+
 html, body {
     margin: 0;
     padding: 0;
@@ -12,58 +16,66 @@ html, body {
 
 /* ===== Reels Container ===== */
 .reels-container {
-    height: 100dvh; /* full device viewport */
+    height: 100dvh;
     width: 100%;
     overflow-y: scroll;
     scroll-snap-type: y mandatory;
     background: #000;
-    padding-bottom: 60px;
-    scroll-behavior: smooth;  /* space for bottom nav */
+    scroll-behavior: smooth;
 }
 
-/* Hide scrollbar for clean look */
 .reels-container::-webkit-scrollbar {
     display: none;
+}
+
+/* Lock reel scrolling when comments open */
+.reels-container.lock-scroll {
+    overflow-y: hidden;
 }
 
 /* ===== Each Reel ===== */
 .reel {
     position: relative;
     width: 100%;
-    height: 100dvh; /* full screen minus nav already padded */
+    height: 100dvh;
     scroll-snap-align: start;
     overflow: hidden;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
     background: #000;
+}
+
+/* ===== Video Wrapper (for shrinking) ===== */
+.video-wrapper {
+    height: 100%;
+    transition: height 0.3s ease;
+}
+
+.reel.show-comments .video-wrapper {
+    height: 50%;
 }
 
 /* ===== VIDEO ===== */
 .reel video {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* fill screen, crop minimal sides */
+    object-fit: cover;
     display: block;
 }
 
-/* ===== Bottom-left overlay (description, buttons) ===== */
+/* ===== Bottom-left overlay ===== */
 .bottom-left-overlay {
     position: absolute;
-    bottom: 80px; /* above bottom nav */
+    bottom: 80px;
     left: 15px;
-    color: #fff;
     max-width: 70%;
     font-size: 14px;
     z-index: 10;
 }
 
-/* ===== Right vertical icons ===== */
+/* ===== Right Icons ===== */
 .right-icons {
     position: absolute;
     right: 10px;
-    bottom: 80px; /* above bottom nav */
+    bottom: 80px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -72,25 +84,96 @@ html, body {
 }
 
 .right-icons button {
-    display: block;
-    background: rgba(0,0,0,0.3);
+    background: rgba(0,0,0,0.4);
     border: none;
     border-radius: 50%;
     padding: 12px;
     font-size: 20px;
-    color: white;
+    color: #fff;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: transform 0.2s ease;
 }
 
-.right-icons button:hover,
 .right-icons button:active {
-    transform: scale(1.2);
-    background: rgba(0,0,0,0.5);
+    transform: scale(1.15);
 }
 
 .right-icons button:focus {
     outline: none;
+}
+
+/* ===== COMMENT SHEET (Mobile Bottom Sheet) ===== */
+.comment-sheet {
+    position: absolute;
+    bottom: 0; /* fully offscreen when hidden */
+    width: 100%;
+    height: 50%;
+    background: #111;
+    color: #fff;
+    transform: translateY(100%); /* fully hidden below viewport */
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    z-index: 20;
+    padding-bottom: var(--bottom-nav-height); /* make room for bottom nav */
+}
+
+/* when comments open */
+.reel.show-comments .comment-sheet {
+    transform: translateY(0); /* slide up */
+}
+
+/* ===== Comment Header ===== */
+.comment-header {
+    padding: 12px;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #333;
+}
+
+/* ===== Comment List ===== */
+.comment-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.comment-item {
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+/* ===== Comment Input ===== */
+.comment-form {
+    display: flex;
+    padding: 10px;
+    padding-bottom: calc(10px + env(safe-area-inset-bottom));
+    border-top: 1px solid #333;
+    background: #000;
+}
+
+.comment-form input {
+    flex: 1;
+    padding: 8px;
+    font-size: 14px;
+    background: #111;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+}
+
+.comment-form input:focus {
+    outline: none;
+}
+
+.comment-form button {
+    padding: 8px 12px;
+    margin-left: 8px;
+    background: #ff2d55;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
 }
 
 /* ===== Bottom Navigation ===== */
@@ -98,22 +181,21 @@ html, body {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0,0,0,0.6);
     position: fixed;
     bottom: 0;
     width: 100%;
-    height: 50px;
+    height: var(--bottom-nav-height);
+    z-index: 30;
 }
 
 .bottom-nav .nav-item {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
     text-decoration: none;
     color: #fff;
-    font-size: 12px; /* text size */
-    gap: 2px;        /* small gap between icon and text */
+    font-size: 12px;
 }
 
 .bottom-nav .nav-item p {
@@ -121,28 +203,18 @@ html, body {
     font-size: 10px;
 }
 
-/* ===== Tablet (768px +) ===== */
+/* ===== Tablet ===== */
 @media (min-width: 768px) {
-    .bottom-nav {
-        height: 70px;
-    }
     .right-icons button {
         padding: 14px;
         font-size: 22px;
     }
 }
 
-/* ===== Desktop (1024px +) ===== */
+/* ===== Desktop ===== */
 @media (min-width: 1024px) {
     .reel video {
         max-width: 420px;
-        max-height: 100%;
-    }
-    .bottom-nav {
-        height: 80px;
-    }
-    .right-icons button {
-        padding: 16px;
-        font-size: 24px;
+        margin: auto;
     }
 }

@@ -10,23 +10,38 @@ export async function getProfile(req, res) {
     }
     const user = isExists.rows[0]
     const savedReels = await pool.query(
-      `SELECT f.name, f.video, f.description
-       FROM usersave as us
-       JOIN fooditem as f ON us.reel_id = f.id
-       WHERE us.user_id = $1`,
-      [userid])
+      `select r.id, r.video, r.name, r.description, coalesce(l.likes_count,0) as likes_count,
+      coalesce(c.comments_count, 0) as comments_count, s.created_at as saved_at from usersave as s join fooditem as r on s.reel_id = r.id
+      left join (select reel_id, count(*) as likes_count from likes group by reel_id) l on r.id = l.reel_id
+      left join(select reel_id, count(*) as comments_count from comments group by reel_id) c on r.id = c.reel_id where s.user_id = $1 order by s.created_at desc`,
+      [userid]
+    );
     
     const comments = await pool.query(
-      `SELECT c.id, c.comment, c.created_at, f.video
-       FROM comments as c
-       JOIN fooditem as f ON c.reel_id = f.id
-       WHERE c.user_id = $1`,
+      `SELECT 
+      c.id,
+      c.comment,
+      c.created_at,
+      f.name AS reel_name,
+      f.video
+        FROM comments c
+        JOIN fooditem f ON c.reel_id = f.id
+        WHERE c.user_id = $1
+        ORDER BY c.created_at DESC`,
       [userid]
     ) 
+    const likes = await pool.query(
+      `select i.id,f.name,f.video from likes as i join fooditem as f on i.reel_id = f.id where i.user_id = $1`,[userid]
+    )
+    const replies = await pool.query(
+      `select r.id, r.reply, c.comment,f.name,f.video from replies as r join comments as c on r.comment_id = c.id join fooditem as f on c.reel_id = f.id where r.user_id =$1 ORDER BY r.created_at DESC`,[userid]
+    )
     res.render("userprofile", {
     user,
     savedReels: savedReels.rows,
-    comments: comments.rows
+    comments: comments.rows,
+    likes : likes.rows,
+    replies: replies.rows
 });
   } catch (error) {
     console.log(error)
@@ -59,12 +74,47 @@ try {
 
 export async function commentReel(req, res) {
   try {
-    const userId = req.user.id
-    const fooditemId = req.params.id
-    const { comment } = req.body
-    const usercomment = await pool.query("insert into comments (user_id, fooditemId, comment) values ($1,$2,$3)",[userId,fooditemId, comment])
-    res.status(200).json({message:"comment is added",user: usercomment.rows})
+    const userId = req.user.id;
+    const fooditemId = req.params.id;
+    const { comment } = req.body;
+
+    // Insert the comment and return the inserted row with user info
+    const result = await pool.query(
+      `INSERT INTO comments (user_id, reel_id, comment)
+       VALUES ($1, $2, $3)
+       RETURNING id, user_id, reel_id, comment`,
+      [userId, fooditemId, comment]
+    );
+
+    const insertedComment = result.rows[0];
+
+    // Get the username of the commenter
+    const userResult = await pool.query(
+      `SELECT name FROM users WHERE id = $1`,
+      [userId]
+    );
+
+    insertedComment.name = userResult.rows[0].name;
+
+    // Return the inserted comment to the frontend
+    res.status(200).json({
+      message: "comment is added",
+      comment: insertedComment
+    });
   } catch (error) {
-    return res.status(500).json({message:"server error"})
+    console.error(error);
+    return res.status(500).json({ message: "server error" });
+  }
+}
+
+
+export async function getReelComment(req, res) {
+  try {
+    const fooditmeid = req.params.id
+    const comment = await pool.query(`select c.comment, u.name from comments as c join users as u on u.id = c.user_id where c.reel_id = $1 order by c.id desc`,[fooditmeid])
+    res.status(200).json(comment.rows)
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({message:"Server error from comment"})
   }
 }

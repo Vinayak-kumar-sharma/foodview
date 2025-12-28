@@ -30,39 +30,158 @@
 <div class="tabs">
   <button class="tab-btn active" data-tab="saved">Saved</button>
   <button class="tab-btn" data-tab="comments">Comments</button>
+  <button class="tab-btn" data-tab="likes">Likes</button>
+  <button class="tab-btn" data-tab="replies">Replies</button>
 </div>
+
 
 <div class="tab-content">
   <!-- Saved Reels -->
-  <div id="saved" class="tab-panel active">
-    <% if (savedReels.length > 0) { %>
-      <div class="saved-grid">
-        <% savedReels.forEach(reel => { %>
-          <div class="card">
-            <video src="<%= reel.video %>" class="video" autoplay muted loop></video>
-          </div>
-        <% }) %>
-      </div>
-    <% } else { %>
-      <div class="empty">No saved reels yet.</div>
-    <% } %>
-  </div>
+<div id="saved" class="tab-panel active">
+  <% if (savedReels.length > 0) { %>
+    <div class="saved-grid">
+      <% savedReels.forEach(reel => { %>
+        <a href="/reel/<%= reel.id %>" class="saved-card">
 
+          <!-- Video preview -->
+          <div class="video-section">
+            <video src="<%= reel.video %>" muted loop class="saved-video"></video>
+
+            <!-- Title and icons on top of the video -->
+            <div class="saved-overlay">
+              <!-- Video Title on Left -->
+              <div class="saved-title">
+                <strong><%= reel.name %></strong>
+              </div>
+
+              <!-- Icons on Right (Stacked Vertically) -->
+              <div class="saved-icons">
+                <div>❤️</div>
+                <div><%= reel.likes_count %></div>
+                <div>💬</div>
+                <div><%= reel.comments_count %></div>
+              </div>
+            </div>
+
+          </div>
+
+        </a>
+      <% }) %>
+    </div>
+  <% } else { %>
+    <div class="empty">No saved reels yet.</div>
+  <% } %>
+</div>
   <!-- Comments -->
   <div id="comments" class="tab-panel">
-    <% if (comments.length > 0) { %>
-      <% comments.forEach(comment => { %>
-        <div class="card">
-          <div class="comment-text">
-            <strong><%= comment.username %>:</strong> <%= comment.comment_text %>
+  <% if (comments.length > 0) { %>
+    <div class="comments-list">
+      <% comments.forEach(c => { %>
+        <div class="comment-card">
+
+          <!-- Reel info -->
+          <div class="comment-reel">
+            🎥 <span><%= c.reel_name %></span>
           </div>
+
+          <!-- Optional video preview -->
+          <video src="<%= c.video %>" muted loop class="comment-video"></video>
+          <!-- Comment text -->
+          <p class="comment-text">
+            <strong>You commented:</strong> <%= c.comment %>
+          </p>
+
+          <!-- Comment time (placed at the end) -->
+          <div class="comment-time">
+            <%= new Date(c.created_at).toLocaleString() %>
+          </div>
+         
+
+          
+
         </div>
       <% }) %>
-    <% } else { %>
-      <div class="empty">No comments yet.</div>
-    <% } %>
-  </div>
+    </div>
+  <% } else { %>
+    <div class="empty">No comments yet.</div>
+  <% } %>
 </div>
+  <!-- Likes -->
+  <div id="likes" class="tab-panel">
+  <% if (likes.length > 0) { %>
+    <div class="likes-list">
+      <% likes.forEach(like => { %>
+        <!-- current route is not working need to make it working -->
+        <a href="/reel/<%= like.id %>" class="like-card"> 
+
+          <!-- Video preview -->
+          <video src="<%= like.video %>" muted loop class="like-video"></video>
+
+          <!-- Video title / name -->
+          <div class="like-title">
+            ❤️ <strong><%= like.name %></strong>
+          </div>
+
+          <!-- Optional: like time if you track it -->
+          <% if (like.created_at) { %>
+            <div class="like-time">
+              <%= new Date(like.created_at).toLocaleString() %>
+            </div>
+          <% } %>
+
+        </a>
+      <% }) %>
+    </div>
+  <% } else { %>
+    <div class="empty">No likes yet.</div>
+  <% } %>
+</div>
+
+<!-- Replies -->
+<div id="replies" class="tab-panel">
+  <% if (replies.length > 0) { %>
+    <div class="replies-list">
+      <% replies.forEach(r => { %>
+        <div class="reply-card">
+
+          <!-- Reply text -->
+          <p class="reply-text">
+            <strong>You replied:</strong> <%= r.reply %>
+          </p>
+
+          <!-- Original comment -->
+          <p class="reply-comment">
+            💬 <em><%= r.comment %></em>
+          </p>
+
+          <!-- Reel info -->
+          <div class="reply-reel">
+            <span>🎥 <%= r.name %></span>
+          </div>
+
+        </div>
+      <% }) %>
+    </div>
+  <% } else { %>
+    <div class="empty">No replies yet.</div>
+  <% } %>
+</div>
+
+</div>
+<script>
+  const buttons = document.querySelectorAll('.tab-btn');
+  const panels = document.querySelectorAll('.tab-panel');
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      buttons.forEach(b => b.classList.remove('active'));
+      panels.forEach(p => p.classList.remove('active'));
+
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.tab).classList.add('active');
+    });
+  });
+</script>
 
 </body>
 </html>

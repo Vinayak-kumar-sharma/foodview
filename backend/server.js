@@ -7,6 +7,7 @@ import { foodItem } from './src/models/food.model.js';
 import { userSaveTable } from './src/models/userSave.model.js';
 import { reelLike } from './src/models/like.model.js';
 import { commentTable } from './src/models/comment.model.js';
+import { createReplieTable } from './src/models/replies.models.js';
 
 await connectDb()
 await createTable()
@@ -15,6 +16,7 @@ await foodItem()
 await userSaveTable()
 await reelLike()
 await commentTable()
+await createReplieTable()
 app.listen(3000, () => {
   console.log('server is running on http://localhost:3000');
 });

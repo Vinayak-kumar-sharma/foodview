@@ -14,4 +14,5 @@ router.get("/fooditem",authFoodPartnermiddleware,addfooditem)
 router.get("/store",authFoodPartnermiddleware,getfoodbyId)
 router.get("/store/:id",getstorebyId)
 
+
 export default router
