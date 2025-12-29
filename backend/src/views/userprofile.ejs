@@ -13,19 +13,27 @@
 <div class="profile-header">
   <!-- LEFT: USER INFO -->
   <div class="user-info">
-    <div class="username"><%= user.name %></div>
-    <div class="email"><%= user.email %></div>
+    <img src="/icons/userwhite.svg" alt="user" class="profile-pic">
+    <div class="user-details">
+      <div class="username"><%= user.name %></div>
+      <div class="email"><%= user.email %></div>
+    </div>
   </div>
 
   <!-- RIGHT: ACTIONS -->
   <div class="header-actions">
-    <a href="/api/home" class="header-link">🏠 Home</a>
+    <a href="/api/home" class="header-link">
+      <img src="/icons/homewhite.svg" alt="home" class="icon"> Home
+    </a>
 
     <form action="/api/user/logout" method="GET">
-      <button type="submit" class="logout-btn">🚪 Logout</button>
+      <button type="submit" class="logout-btn">
+        <img src="/icons/logoutwhite.svg" alt="logout" class="icon"> Logout
+      </button>
     </form>
   </div>
 </div>
+
 
 <div class="tabs">
   <button class="tab-btn active" data-tab="saved">Saved</button>
@@ -57,9 +65,9 @@
               <!-- Icons on Right (Stacked Vertically) -->
               <div class="saved-icons">
                 <div> <img src="/icons/Likewhite.svg" alt="likes"></div>
-                <div><%= reel.likes_count %></div>
+                <div class="icon-count"><%= reel.likes_count %></div>
                 <div><img src="/icons/commentwhite.svg" alt="comments"></div>
-                <div><%= reel.comments_count %></div>
+                <div class="icon-count"><%= reel.comments_count %></div>
               </div>
             </div>
 
@@ -79,13 +87,14 @@
       <% comments.forEach(c => { %>
         <div class="comment-card">
 
+          <!-- Optional video preview -->
+          <video src="<%= c.video %>" muted loop class="comment-video"></video>
+
           <!-- Reel info -->
           <div class="comment-reel">
             🎥 <span><%= c.reel_name %></span>
           </div>
 
-          <!-- Optional video preview -->
-          <video src="<%= c.video %>" muted loop class="comment-video"></video>
           <!-- Comment text -->
           <p class="comment-text">
             <strong>You commented:</strong> <%= c.comment %>
@@ -118,10 +127,10 @@
           <video src="<%= like.video %>" muted loop class="like-video"></video>
 
           <!-- Video title / name -->
-          <div class="like-title">
-            <strong><%= like.name %></strong>
+          <div class="like-overlay">
+            <div class="like-title"><strong><%= like.name %></strong></div>
           </div>
-
+          
           <!-- Optional: like time if you track it -->
           <% if (like.created_at) { %>
             <div class="like-time">

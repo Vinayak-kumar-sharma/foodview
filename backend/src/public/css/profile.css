@@ -1,4 +1,3 @@
-/* RESET / BASE */
 * {
   margin: 0;
   padding: 0;
@@ -6,79 +5,144 @@
 }
 
 body {
-  background: #f9f9f9;
-  color: #333;
-  font-family: Arial, sans-serif;
-  text-decoration: none;
-}
-
-/* ===== HEADER ===== */
-.profile-header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 14px 16px;
+  font-family: 'Inter', Arial, sans-serif;
   background: #000;
   color: #fff;
 }
 
-.user-info .username {
-  font-size: 18px;
+/* PROFILE HEADER - MOBILE-FIRST LEFT-RIGHT */
+.profile-header {
+  display: flex;
+  justify-content: space-between; /* left: user info, right: actions */
+  align-items: center;            /* vertically center all items */
+  padding: 12px 16px;
+  background-color: #000;
+  color: #fff;
+  border-bottom: 1px solid #222;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* LEFT: USER INFO */
+.user-info {
+  display: flex;
+  align-items: center;   /* vertically center avatar + details */
+  gap: 10px;
+}
+
+.profile-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 8px dashed #fff;
+}
+
+/* User details: name + email stacked vertically */
+.user-details {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.username {
+  font-size: 14px;
   font-weight: 600;
 }
 
-.user-info .email {
-  font-size: 13px;
-  opacity: 0.8;
+.email {
+  font-size: 11px;
+  color: #aaa;
 }
 
+/* RIGHT: ACTIONS */
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 8px;
 }
 
-.header-link {
+.header-link,
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
   color: #fff;
   text-decoration: none;
-  font-size: 14px;
-}
-
-.logout-btn {
   background: none;
   border: none;
-  color: #fff;
-  font-size: 14px;
   cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 6px;
+  transition: background 0.3s;
+}
+
+.header-link:hover {
+  background: #222;
 }
 
 .logout-btn:hover {
-  color: #ff4d4d;
+  background: #ff4500;
+  color: #fff;
+}
+
+/* ICONS */
+.icon {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+}
+
+/* ===== TABLET / DESKTOP ===== */
+@media (min-width: 600px) {
+  .profile-pic {
+    width: 50px;
+    height: 50px;
+  }
+
+  .username {
+    font-size: 16px;
+  }
+
+  .email {
+    font-size: 13px;
+  }
+
+  .header-link,
+  .logout-btn {
+    font-size: 14px;
+    padding: 6px 12px;
+  }
+
+  .icon {
+    width: 16px;
+    height: 16px;
+  }
 }
 
 /* ===== TABS ===== */
 .tabs {
   display: flex;
-  border-bottom: 1px solid #ddd;
-  background: #fff;
+  background: #000;
+  border-bottom: 1px solid #222;
 }
 
 .tab-btn {
   flex: 1;
   padding: 12px 0;
-  border: none;
   background: none;
-  cursor: pointer;
+  border: none;
+  color: #888;
   font-weight: 600;
-  color: #666;
+  cursor: pointer;
 }
 
 .tab-btn.active {
-  color: #000;
-  border-bottom: 2px solid #000;
+  color: #fff;
+  border-bottom: 2px solid #ff4500;
 }
 
 /* ===== TAB CONTENT ===== */
@@ -97,248 +161,250 @@ body {
 /* ===== COMMENTS ===== */
 .comment-text {
   font-size: 14px;
-  padding: 10px;
-  border-bottom: 1px solid #eee;
+  padding: 12px;
+  border-bottom: 1px solid #222;
+  color: #ddd;
 }
 
-/* ===== EMPTY STATE ===== */
-.empty {
-  text-align: center;
-  color: #999;
-  font-size: 14px;
-  padding: 20px;
-}
-/* ===== SAVED REELS (NO CARD STYLE) ===== */
+/* ===== SAVED VIDEOS GRID (AUTO RESPONSIVE) ===== */
 .saved-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 2 columns per row */
-  gap: 12px; /* Reduced space between grid items */
-  padding: 8px; /* Reduce padding around the grid */
-  width: 100%; /* Ensure the container uses the full width */
-  overflow-x: hidden; /* Prevent horizontal scrolling */
-  box-sizing: border-box;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+  padding: 12px;
 }
 
-/* Video Section Styling */
+/* ===== VIDEO CARD ===== */
 .video-section {
   position: relative;
-  width: 100%;
-  height: 180px; /* Adjust the height of the video */
-  overflow: hidden; /* Ensure the video fits nicely */
-  border-radius: 8px; /* Round corners for the video */
-  padding: 0; /* Remove any internal padding */
+  border-radius: 12px;
+  overflow: hidden;
+  background: #111;
 }
 
-/* Video styling */
+/* Vertical video handling (same as your reference page) */
 .saved-video {
   width: 100%;
-  height: 100%;
-  object-fit: cover; /* Ensure the video fills the area without distorting */
+  aspect-ratio: 9 / 16;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
 }
 
-/* Overlay (Title + Icons) */
+.video-section:hover .saved-video {
+  transform: scale(1.05);
+}
+
+/* ===== OVERLAY ===== */
 .saved-overlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
   bottom: 0;
-  display: flex;
-  justify-content: space-between; /* Align title on left and icons on right */
-  align-items: flex-end; /* Align items at the bottom of the container */
-  padding: 6px; /* Further reduced padding */
-  color: white;
-  background: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
-  border-radius: 8px; /* Round corners of the overlay */
-}
-
-/* Title Styling (Remove Bold, Allow Wrapping) */
-.saved-title {
-  font-size: 12px; /* Smaller font size */
-  font-weight: normal; /* Remove bold */
-  color: white;
-  margin-bottom: 4px; /* Reduced space between title and icons */
-  text-decoration: none; /* Remove underline from title */
-  word-wrap: break-word; /* Allow the name to wrap if it's too long */
-  white-space: normal; /* Ensure the title breaks into new lines */
-  flex-grow: 1; /* Let title take the remaining space */
-}
-
-/* Icons Styling (Vertical Layout) */
-.saved-icons {
-  font-size: 10px; /* Smaller icon size */
-  display: flex;
-  flex-direction: column; /* Stack icons vertically */
-  gap: 6px; /* Reduced gap between icons */
-  justify-content: flex-end; /* Align icons at the bottom of the video */
-  align-items: center; /* Center icons */
-  margin-left: 8px; /* Add a little space to the left */
-}
-
-/* Empty State */
-.empty {
-  text-align: center;
-  font-size: 18px;
-  color: #555;
-}
-
-/* Mobile View - 2 Columns Layout (Small devices) */
-@media (max-width: 600px) {
-  .saved-grid {
-    grid-template-columns: repeat(2, 1fr); /* 2 columns for mobile */
-  }
-
-  .video-section {
-    height: 180px; /* Adjust video height for mobile */
-  }
-}
-
-/* Tablet View - 2 Columns Layout */
-@media (min-width: 600px) {
-  .saved-grid {
-    grid-template-columns: repeat(2, 1fr); /* Two columns layout for tablets */
-  }
-
-  .video-section {
-    height: 220px; /* Adjust video height for tablet */
-  }
-}
-
-/* Desktop View - 2 Columns Layout */
-@media (min-width: 1024px) {
-  .saved-grid {
-    grid-template-columns: repeat(2, 1fr); /* Two columns layout for desktop */
-  }
-
-  .video-section {
-    height: 250px; /* Adjust video height for desktop */
-  }
-}
-
-/* ===== COMMENTS ===== */
-.comment-text {
-  font-size: 14px;
-  padding: 10px;
-  border-bottom: 1px solid #eee;
-}
-
-/* ===== EMPTY STATE ===== */
-.empty {
-  text-align: center;
-  color: #999;
-  font-size: 14px;
-  padding: 20px;
-}
-.tabs {
-  display: flex;
-  gap: 20px;
-  border-bottom: 1px solid #ddd;
-  margin-bottom: 16px;
-}
-
-.tab-btn {
-  padding: 10px 0;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 15px;
-  position: relative;
-}
-
-.tab-btn.active {
-  font-weight: bold;
-}
-
-.tab-btn.active::after {
-  content: "";
-  position: absolute;
   left: 0;
-  bottom: -1px;
   width: 100%;
-  height: 2px;
-  background: black;
+  padding: 6px 10px;
+  display: flex;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.5);
 }
 
-.tab-panel {
-  display: none;
+/* ===== OVERLAY ===== */
+.saved-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 8px 10px;
+  display: flex;
+  align-items: flex-end; /* anchor bottom */
+  justify-content: space-between;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.65),
+    rgba(0, 0, 0, 0)
+  );
 }
 
-.tab-panel.active {
-  display: block;
+/* Icons – ABOVE title */
+.saved-icons {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 11px;
+  color: #fff;
+  margin-bottom: 18px; /* ⬅ push icons up */
 }
 
-.comment-card,
-.like-card,
-.reply-card {
-  padding: 12px;
-  margin-bottom: 10px;
-  background: #f7f7f7;
-  border-radius: 8px;
+/* Title – closest to bottom */
+.saved-title {
+  font-size: 12px;
+  color: #fff;
+  line-height: 1.35;
+  max-width: 75%;
+  margin-bottom: 2px; /* ⬅ stick to bottom */
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
+.icon-count {
+  margin-top: 4px;
+  font-size: 11px;
+  opacity: 0.9;
+  text-align: center; /* ⬅ ensure number centers */
+}
+/* ===== COMMENTS LIST ===== */
 .comments-list {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 18px;
 }
 
+/* No card look */
 .comment-card {
-  background: #f7f7f7;
-  padding: 14px;
-  border-radius: 10px;
+  background: none;
+  padding: 0;
+  margin: 0;
 }
 
-.comment-text {
-  margin-bottom: 8px;
-}
-
-.comment-reel {
-  font-size: 14px;
-  color: #666;
-  margin-bottom: 6px;
-}
-
+/* Video preview (top) */
 .comment-video {
   width: 100%;
-  max-height: 200px;
-  border-radius: 8px;
+  aspect-ratio: 16 / 9;
   object-fit: cover;
-}
-.comment-time {
-  font-size: 12px;
-  color: #888;
-  margin-top: 6px;
-  text-align: right; /* optional: align to the right */
-}
-.like-card {
-  display: block;
-  text-decoration: none;
-  color: inherit;
-  background: #f8f8f8;
   border-radius: 10px;
-  padding: 12px;
-  margin-bottom: 12px;
-  transition: background 0.2s;
-}
-
-.like-card:hover {
-  background: #eee;
-}
-
-.like-video {
-  width: 100%;
-  max-height: 200px;
-  border-radius: 8px;
-  object-fit: cover;
   margin-bottom: 8px;
+  background: #111;
 }
 
-.like-title {
-  font-size: 15px;
+/* Reel / video title */
+.comment-reel {
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
   margin-bottom: 4px;
 }
 
-.like-time {
+/* Comment text */
+.comment-text {
+  font-size: 14px;
+  color: #ddd;
+  line-height: 1.5;
+  margin-bottom: 6px;
+}
+
+/* Time (bottom) */
+.comment-time {
   font-size: 12px;
   color: #888;
-  text-align: right;
 }
+
+/* Separator between comments */
+.comment-card:not(:last-child) {
+  padding-bottom: 14px;
+  border-bottom: 1px solid #222;
+}
+
+/* Empty state */
+.empty {
+  text-align: center;
+  color: #888;
+  font-size: 14px;
+  padding: 24px 0;
+}
+
+/* Likes container (grid layout) */
+.likes-list {
+  display: grid;
+  grid-template-columns: 1fr; /* mobile-first: 1 per row */
+  gap: 12px;
+  padding: 16px 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Individual like card */
+.like-card {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: #fff;       /* readable on dark background */
+  background: none;  /* remove card */
+  padding: 0;
+  margin: 0;
+  position: relative; /* for overlay */
+}
+
+/* Video preview */
+.like-video {
+  width: 100%;
+  aspect-ratio: 9 / 16; /* vertical video */
+  object-fit: cover;
+  border-radius: 12px;
+  background: #111;    /* fallback dark */
+  display: block;
+  margin-bottom: 0;    /* overlay on video */
+  transition: transform 0.3s ease;
+}
+
+.like-card:hover .like-video {
+  transform: scale(1.03);
+}
+
+.like-overlay {
+  position: absolute;
+  bottom: 6px;  /* slightly above the bottom corner */
+  left: 8px;
+  right: 8px;
+  padding: 0;   /* remove background padding */
+  box-sizing: border-box;
+}
+
+.like-title {
+  font-size: 12px;
+  color: #fff;
+  font-weight: normal;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Time / metadata */
+.like-time {
+  font-size: 11px;
+  color: #888;
+  text-align: left;
+  margin-top: 4px;
+}
+
+/* Empty state */
+.empty {
+  text-align: center;
+  color: #888;
+  font-size: 14px;
+  padding: 24px 0;
+}
+
+/* ===== Responsive columns ===== */
+
+/* Small devices: 2 columns */
+@media (min-width: 400px) {
+  .likes-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Tablets: 2–3 columns */
+@media (min-width: 600px) {
+  .likes-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Desktop: 3 columns */
+@media (min-width: 900px) {
+  .likes-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
