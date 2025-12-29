@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= partner.name %> - Store</title>
+<link rel="stylesheet" href="/css/userviewstore.css">
+</head>
+<body>
+
+  <!-- Header: Store info + Home button -->
+  <div class="store-header">
+    <div class="store-info">
+      <div class="store-avatar"></div>
+      <div>
+        <div class="store-name"><%= partner.name %></div>
+        <div class="store-stats">
+          <%= partner.total_meals %> Meals • <%= partner.total_likes %> Likes
+        </div>
+      </div>
+    </div>
+    <a href="/api/home" class="home-btn">Home</a>
+  </div>
+
+  <!-- Video Grid -->
+  <% if (video.length > 0) { %>
+    <div class="video-grid">
+      <% video.forEach(video => { %>
+        <div class="video-item">
+          <video src="<%= video.video %>" muted loop></video>
+          <div class="video-title"><%= video.name %></div>
+          
+          <a href="/api/partner/<%= partner.id %>/dish/<%= video.id %>" class="view-btn">View Details</a>
+        </div>
+      <% }) %>
+    </div>
+  <% } else { %>
+    <div class="empty">No videos available.</div>
+  <% } %>
+
+</body>
+</html>

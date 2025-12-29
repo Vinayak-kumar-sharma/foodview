@@ -1,0 +1,115 @@
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', Arial, sans-serif; background: #000; color: #fff; padding: 0 12px; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; }
+
+    /* ===== Header ===== */
+    .store-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid #222;
+    }
+
+    .store-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .store-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: #555;
+      flex-shrink: 0;
+    }
+
+    .store-name {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .store-stats {
+      font-size: 0.85rem;
+      color: #aaa;
+    }
+
+    /* Home Button */
+    .home-btn {
+      padding: 6px 12px;
+      background: #ff4500;
+      color: #fff;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: background 0.3s;
+    }
+
+    .home-btn:hover { background: #ff652f; }
+
+    /* ===== Video Grid ===== */
+    .video-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .video-item {
+      border-radius: 12px;
+      overflow: hidden;
+      background: #111;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .video-item video {
+      width: 100%;
+      aspect-ratio: 9 / 16;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+      display: block;
+    }
+
+    .video-item:hover video { transform: scale(1.05); }
+
+    /* Video title overlay */
+    .video-title {
+      padding: 6px 10px;
+      background: rgba(0,0,0,0.5);
+      color: #fff;
+      font-size: 0.85rem;
+      line-height: 1.2;
+    }
+
+    /* View Details button below video */
+    .view-btn {
+      margin: 6px 10px 10px 10px;
+      padding: 6px 0;
+      background: #28a745;
+      color: #fff;
+      border-radius: 6px;
+      text-align: center;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: background 0.3s;
+    }
+
+    .view-btn:hover { background: #45c260; }
+
+    /* Empty state */
+    .empty {
+      text-align: center;
+      color: #888;
+      padding: 20px 0;
+      font-size: 1rem;
+    }
+
+    /* Responsive columns */
+    @media (min-width: 400px) { .video-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 900px) { .video-grid { grid-template-columns: repeat(3, 1fr); } }

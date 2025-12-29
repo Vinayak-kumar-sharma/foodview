@@ -1,6 +1,6 @@
 import express from 'express'
 import authFoodPartnermiddleware from '../middleware/auth.middleware.js'
-import { addfooditem, foodItem, getfoodbyId, getstorebyId} from '../controller/food.controller.js'
+import { addfooditem, foodItem, getdishbyId, getfoodbyId, getstorebyId} from '../controller/food.controller.js'
 import multer from 'multer'
 
 
@@ -13,6 +13,7 @@ router.post("/fooditem",authFoodPartnermiddleware, upload.single("video"),foodIt
 router.get("/fooditem",authFoodPartnermiddleware,addfooditem)
 router.get("/store",authFoodPartnermiddleware,getfoodbyId)
 router.get("/store/:id",getstorebyId)
+router.get("/partner/:partnerId/dish/:dishId",getdishbyId)
 
 
 export default router

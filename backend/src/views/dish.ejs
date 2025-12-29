@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= dish.dish_name %> - Dish Details</title>
+  <link rel="stylesheet" href="/css/dish.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <a href="/api/store/<%= dish.foodpartner_id %>" class="back-btn">← Back</a>
+    <span class="page-title">Dish Details</span>
+    <a href="/api/home" class="home-btn">🏠 Home</a>
+  </div>
+
+  <!-- Food Partner Card -->
+  <div class="card partner-info">
+    <div class="card-title">Food Partner</div>
+    <div class="partner-content">
+      <img src="/icons/userwhite.svg" alt="Partner" class="partner-pic">
+      <div class="partner-details">
+        <div class="partner-name"><%= dish.partner_name %></div>
+        <div class="partner-email"><%= dish.partner_email %></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dish Video Card -->
+  <div class="card dish-video-card">
+    <div class="card-title">Dish Video</div>
+    <% if (dish.video) { %>
+      <video src="<%= dish.video %>" class="dish-video" muted autoplay loop controls></video>
+    <% } else { %>
+      <div class="empty">No video available</div>
+    <% } %>
+  </div>
+
+  <!-- Dish Info Card -->
+  <div class="card dish-info">
+    <div class="card-title">Dish Info</div>
+    <div class="dish-name"><%= dish.dish_name %></div>
+    <% if (dish.description) { %>
+      <div class="dish-description"><%= dish.description %></div>
+    <% } %>
+    <% if (dish.price) { %>
+      <div class="dish-price">Price: $<%= dish.price %></div>
+    <% } %>
+  </div>
+
+  <!-- Order Button Card -->
+  <a href="/order/<%= dish.dish_id %>" class="card order-btn">
+    Order Now
+  </a>
+
+</body>
+</html>
