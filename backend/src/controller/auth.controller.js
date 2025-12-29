@@ -43,9 +43,13 @@ export async function registerUser(req, res) {
     // 5. Send response
     res.cookie("token", token);
     res.status(201).redirect("/api/home")
+    return res.status(200).json({success:"True", redirect:"/api/user/login"})
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    return res.status(500).render("serverside",{
+      statusCode: 500,
+      message: "Something broke on our end."
+    })
   }
 }
 export async function getLogin(req, res) {
@@ -77,9 +81,13 @@ export async function loginUser(req, res) {
       sameSite: "strict",
       secure: false, // true in production
     });
-    res.status(201).redirect("/api/home");
+  
+    return res.status(200).json({ success: true, redirect: "/api/home" })
   } catch (error) {
-    return res.status(500).json({ message: "Server error" });
+    return res.status(500).render("serverside",{
+      statusCode: 500,
+      message: "Something broke on our end."
+    })
   }
 }
 export async function logoutUser(req, res) {
@@ -87,7 +95,10 @@ export async function logoutUser(req, res) {
     res.clearCookie("token");
     res.status(200).redirect("/");
   } catch (error) {
-    return res.status(500).json({ mesage: "server error" });
+    return res.status(500).render("serverside",{
+      statusCode: 500,
+      message: "Something broke on our end."
+    })
   }
 }
 
@@ -125,9 +136,10 @@ export async function registerfoodPartner(req, res) {
     res.cookie("token", token);
     res.status(201).redirect("/api/foodpartner/login")
   } catch (error) {
-    res.status(500).json({
-      message: "server error from food partner",
-    });
+    return res.status(500).render("serverside",{
+      statusCode: 500,
+      message: "Something broke on our end."
+    })
   }
 }
 export async function getpartnerLogin(req, res){
@@ -139,7 +151,10 @@ export async function logoutfoodPartner(req, res){
     res.status(200).redirect("/")
   }
   catch(err){
-    return res.status(500).json({message:"server error food partner logout"})
+    return res.status(500).render("serverside",{
+      statusCode: 500,
+      message: "Something broke on our end."
+    })
   }
 }
 export async function loginfoodPartner(req, res){
@@ -150,7 +165,7 @@ export async function loginfoodPartner(req, res){
       "SELECT id, password FROM foodpartner WHERE email =$1",[email]
     )
     if(isuserExist.rows.length === 0){
-      return res.status(400).json({mesage:"False: email not valid"})
+      return res.status(400).json({success:" False ",message:" Email is not exists "})
     }
 
     const user = isuserExist.rows[0]
@@ -158,16 +173,17 @@ export async function loginfoodPartner(req, res){
     const isMatch = await bcrypt.compare(password, user.password)
 
     if(!isMatch){
-      return res.status(400).json({message:"False : invalid password"})
+      return res.status(400).json({message:" Invalid password "})
     }
     const token = jwt.sign({userId:user.id},process.env.JWT_KEY,{expiresIn:"1d"})
 
     res.cookie("token", token)
-    res.status(200).redirect("/api/store")
-
-
+    return res.status(200).json({ success: true, redirect: "/api/store" })
   } catch (error) {
     console.error(error)
-    res.status(500).json({message:"server error"})
+    return res.status(500).render("serverside",{
+      statusCode: 500,
+      message: "Something broke on our end."
+    })
   }
 }

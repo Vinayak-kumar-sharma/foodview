@@ -45,7 +45,10 @@ export async function getProfile(req, res) {
 });
   } catch (error) {
     console.log(error)
-    return res.status(500).json({message:"Server Error"})
+    return res.status(500).render("serverside",{
+      statusCode: 500,
+      message: "Something broke on our end."
+    })
   }
 
 }
@@ -57,7 +60,10 @@ export async function saveReel(req, res){
     const savedReel = await pool.query("insert into usersave (user_id, reel_id) values ($1,$2)",[userId,fooditemId])
     res.status(200).json({message:"True: saved", reel:savedReel.rows[0]})
   } catch (error) {
-    return res.status(500).json({message:"server error"})
+    return res.status(500).render("serverside",{
+      statusCode: 500,
+      message: "Something broke on our end."
+    })
   }
 }
 
@@ -68,7 +74,10 @@ try {
   const likedReel = await pool.query("insert into likes (user_id, reel_id) values ($1,$2)",[userId, fooditemId])
   res.status(200).json({message:"True",like:likedReel.rows})
 } catch (error) {
-  return res.status(500).json({message:"server error"})
+  return res.status(500).render("serverside",{
+      statusCode: 500,
+      message: "Something broke on our end."
+    })
 }
 }
 
@@ -103,7 +112,10 @@ export async function commentReel(req, res) {
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: "server error" });
+    return res.status(500).render("serverside",{
+      statusCode: 500,
+      message: "Something broke on our end."
+    })
   }
 }
 
@@ -115,6 +127,9 @@ export async function getReelComment(req, res) {
     res.status(200).json(comment.rows)
   } catch (error) {
     console.error(error)
-    return res.status(500).json({message:"Server error from comment"})
+    return res.status(500).render("serverside",{
+      statusCode: 500,
+      message: "Something broke on our end."
+    })
   }
 }

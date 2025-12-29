@@ -3,24 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>User Login</title>
     <link rel="stylesheet" href="/css/common.css">
 </head>
 <body>
+
 <div class="container">
     <h2>User Login</h2>
-    <form action="/api/user/login" method="POST">
-        <label>Email</label>
-        <input type="email" name="email" required>
 
-        <label>Password</label>
-        <input type="password" name="password" required>
+    <!-- ERROR MESSAGE AREA -->
+    <div id="errorBox" class="error-box" style="display:none;"></div>
 
+    <form id="userLoginForm">
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="password" name="password" placeholder="Password" required>
         <button type="submit">Login</button>
     </form>
+
     <div class="link">
         <a href="/api/user/signup">Create new account</a>
     </div>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("userLoginForm");
+    const errorBox = document.getElementById("errorBox");
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        // Clear previous error
+        errorBox.style.display = "none";
+        errorBox.textContent = "";
+
+        const email = form.email.value.trim();
+        const password = form.password.value.trim();
+
+        if (!email || !password) {
+            errorBox.textContent = "Email and password are required.";
+            errorBox.style.display = "block";
+            return;
+        }
+
+        try {
+            const res = await fetch("/api/user/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password })
+            });
+
+            const data = await res.json().catch(() => ({}));
+
+            if (!res.ok || !data.success) {
+                errorBox.textContent = data.message || "Invalid email or password.";
+                errorBox.style.display = "block";
+                return;
+            }
+
+            // Redirect on success
+            window.location.href = data.redirect;
+
+        } catch (err) {
+            console.error("Fetch error:", err);
+            errorBox.textContent = "Network error. Please try again.";
+            errorBox.style.display = "block";
+        }
+    });
+});
+</script>
+
 </body>
 </html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= statusCode %> | Server Error</title>
+<link rel="stylesheet" href="/css/serverside.css">
+</head>
+
+<body>
+  <div class="error-container">
+    <div class="error-code"><%= statusCode %></div>
+
+    <div class="error-message">
+      <%= message %>
+    </div>
+
+    <a href="/" class="error-action">RETRY</a>
+  </div>
+</body>
+</html>

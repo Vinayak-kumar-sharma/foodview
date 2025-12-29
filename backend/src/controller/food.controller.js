@@ -22,7 +22,10 @@ export async function foodItem(req, res) {
 
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error fooditem" });
+    return res.status(500).render("serverside",{
+      statusCode: 500,
+      message: "Something broke on our end."
+    })
   }
 }
 export async function addfooditem(req, res) {
@@ -46,7 +49,10 @@ export async function getfoodItem(req, res){
       )
     res.render("home", { reels: foodItems.rows });
   } catch (error) {
-    return res.status(500).json({message:"Server Error"})
+    return res.status(500).render("serverside",{
+      statusCode: 500,
+      message: "Something broke on our end."
+    })
   }
 }
 
@@ -68,7 +74,10 @@ export async function getfoodbyId(req,res) {
 
   } catch (error) {
     console.log(error)
-    return res.status(500).json({message:"server error from getfoodbyid"})
+    return res.status(500).render("serverside",{
+      statusCode: 500,
+      message: "Something broke on our end."
+    })
   }
 }
 
@@ -89,7 +98,10 @@ export async function getstorebyId(req,res) {
 
   } catch (error) {
     console.log(error)
-    return res.status(500).json({message:"server error from getfoodbyid"})
+    return res.status(500).render("serverside",{
+      statusCode: 500,
+      message: "Something broke on our end."
+    })
   }
 }
 
@@ -112,13 +124,17 @@ export async function getdishbyId(req, res) {
       WHERE i.id = $1 AND f.id = $2`,[dishId,partnerId])
 
     if(result.rows.length == 0){
-      return res.json({message:"Invalid request"})
+      return res.render("clientside",{statusCode: 404,
+    message: "Page not found"})
     }
     const dish = result.rows[0]
 
     res.render("dish",{dish})
   } catch (error) {
     console.error(error)
-    return res.status(500).json({message:"server error"})
+    return res.status(500).render("serverside",{
+      statusCode: 500,
+      message: "Something broke on our end."
+    })
   }
 }

@@ -1,28 +1,78 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Food Partner Login</title>
-    <link rel="stylesheet" href="/css/common.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Food Partner Login</title>
+  <link rel="stylesheet" href="/css/common.css">
 </head>
 <body>
 
 <div class="form-wrapper">
-    <h2>Food Partner Login</h2>
-    <form action="/api/foodpartner/login" method="POST">
-        <label>Email</label>
-        <input type="email" name="email" placeholder="Enter your email" required>
+  <h2>Food Partner Login</h2>
 
-        <label>Password</label>
-        <input type="password" name="password" placeholder="Enter your password" required>
+  <!-- ERROR MESSAGE AREA -->
+  <div id="errorBox" class="error-box" style="display:none;"></div>
 
-        <button type="submit">Login</button>
-    </form>
-    <div class="link">
-        <a href="/api/foodpartner/signup">Register as Partner</a>
-    </div>
+  <form id="foodPartnerLoginForm">
+    <input type="email" name="email" placeholder="Email">
+    <input type="password" name="password" placeholder="Password">
+    <button type="submit">Login</button>
+  </form>
+
+  <div class="link">
+    <a href="/api/foodpartner/signup">Register as Partner</a>
+  </div>
 </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("foodPartnerLoginForm");
+    const errorBox = document.getElementById("errorBox");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      // Clear previous error
+      errorBox.style.display = "none";
+      errorBox.textContent = "";
+
+      const email = form.email.value.trim();
+      const password = form.password.value.trim();
+
+      // Frontend validation
+      if (!email || !password) {
+        errorBox.textContent = "Email and password are required.";
+        errorBox.style.display = "block";
+        return;
+      }
+
+      try {
+        const res = await fetch("/api/foodpartner/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await res.json().catch(() => ({}));
+
+        if (!res.ok) {
+          errorBox.textContent = data.message || "Invalid email or password.";
+          errorBox.style.display = "block";
+          return;
+        }
+
+        // Success → redirect (example: dashboard)
+        window.location.href = data.redirect;
+
+      } catch (err) {
+        console.error("Fetch error:", err);
+        errorBox.textContent = "Network error. Please try again.";
+        errorBox.style.display = "block";
+      }
+    });
+  });
+</script>
 
 </body>
 </html>

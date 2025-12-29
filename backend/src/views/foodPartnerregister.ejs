@@ -1,31 +1,80 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Food Partner Registration</title>
-    <link rel="stylesheet" href="/css/common.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Food Partner Registration</title>
+  <link rel="stylesheet" href="/css/common.css">
 </head>
 <body>
 
 <div class="form-wrapper">
-    <h2>Food Partner Registration</h2>
-    <form action="/api/foodpartner/register" method="POST">
-        <label>Restaurant Name</label>
-        <input type="text" name="name" placeholder="Enter restaurant name" required>
+  <h2>Food Partner Registration</h2>
 
-        <label>Email</label>
-        <input type="email" name="email" placeholder="Enter your email" required>
+  <!-- ERROR MESSAGE AREA -->
+  <div id="errorBox" class="error-box" style="display:none;"></div>
 
-        <label>Password</label>
-        <input type="password" name="password" placeholder="Enter your password" required>
+  <form id="foodPartnerForm">
+    <input type="text" name="name" placeholder="Restaurant Name">
+    <input type="email" name="email" placeholder="Email">
+    <input type="password" name="password" placeholder="Password">
+    <button type="submit">Register</button>
+  </form>
 
-        <button type="submit">Register</button>
-    </form>
-    <div class="link">
-        <a href="/api/foodpartner/login">Already registered? Login</a>
-    </div>
+  <div class="link">
+    <a href="/api/foodpartner/login">Already registered? Login</a>
+  </div>
 </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("foodPartnerForm");
+    const errorBox = document.getElementById("errorBox");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      // Clear previous error
+      errorBox.style.display = "none";
+      errorBox.textContent = "";
+
+      const name = form.name.value.trim();
+      const email = form.email.value.trim();
+      const password = form.password.value.trim();
+
+      // Frontend validation
+      if (!name || !email || !password) {
+        errorBox.textContent = "All fields are required.";
+        errorBox.style.display = "block";
+        return;
+      }
+
+      try {
+        const res = await fetch("/api/foodpartner/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, email, password })
+        });
+
+        const data = await res.json().catch(() => ({}));
+
+        if (!res.ok) {
+          errorBox.textContent = data.message || "Something went wrong.";
+          errorBox.style.display = "block";
+          return;
+        }
+
+        // Success → redirect
+        window.location.href = "/api/foodpartner/login";
+
+      } catch (err) {
+        console.error("Fetch error:", err);
+        errorBox.textContent = "Network error. Please try again.";
+        errorBox.style.display = "block";
+      }
+    });
+  });
+</script>
 
 </body>
 </html>

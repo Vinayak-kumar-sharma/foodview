@@ -1,0 +1,63 @@
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      width: 100vw;
+      background: #000;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .error-container {
+      text-align: center;
+      padding: 24px;
+      max-width: 90%;
+    }
+
+    .error-code {
+      font-size: 96px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+    }
+
+    .error-message {
+      font-size: 18px;
+      opacity: 0.8;
+      margin-bottom: 32px;
+    }
+
+    .error-action {
+      display: inline-block;
+      padding: 12px 24px;
+      border: 1px solid #fff;
+      color: #fff;
+      text-decoration: none;
+      font-size: 14px;
+      letter-spacing: 1px;
+      transition: all 0.2s ease;
+    }
+
+    .error-action:hover {
+      background: #fff;
+      color: #000;
+    }
+
+    @media (max-width: 480px) {
+      .error-code {
+        font-size: 72px;
+      }
+
+      .error-message {
+        font-size: 16px;
+      }
+    }
