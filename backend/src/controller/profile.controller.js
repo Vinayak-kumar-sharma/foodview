@@ -6,7 +6,8 @@ export async function getProfile(req, res) {
     const isExists = await pool.query("Select id, name, email from users where id = $1", [userid])
 
     if(isExists.rows.length === 0){
-      return res.status(400).json({message:"False : Invalid User"})
+      return res.status(401).render("clientside",{statusCode: 401,
+    message: "Invalid User"})
     }
     const user = isExists.rows[0]
     const savedReels = await pool.query(

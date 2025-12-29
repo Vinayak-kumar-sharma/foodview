@@ -10,7 +10,11 @@
 
 <div class="form-wrapper">
     <h2>User Registration</h2>
-    <form action="/api/user/register" method="POST">
+
+    <!-- ERROR MESSAGE AREA -->
+    <div id="errorBox" class="error-box"></div>
+
+    <form id="userRegisterForm">
         <label>Name</label>
         <input type="text" name="name" placeholder="Enter your name" required>
 
@@ -22,10 +26,61 @@
 
         <button type="submit">Register</button>
     </form>
+
     <div class="link">
         <a href="/api/user/login">Already have an account? Login</a>
     </div>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("userRegisterForm");
+    const errorBox = document.getElementById("errorBox");
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        // Clear previous error
+        errorBox.style.display = "none";
+        errorBox.textContent = "";
+
+        const name = form.name.value.trim();
+        const email = form.email.value.trim();
+        const password = form.password.value.trim();
+
+        // Simple client-side validation
+        if (!name || !email || !password) {
+            errorBox.textContent = "All fields are required.";
+            errorBox.style.display = "block";
+            return;
+        }
+
+        try {
+            const response = await fetch("/api/user/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name, email, password })
+            });
+
+            const result = await response.json().catch(() => ({}));
+
+            if (!response.ok || !result.success) {
+                errorBox.textContent = result.message || "Registration failed. Please try again.";
+                errorBox.style.display = "block";
+                return;
+            }
+
+            // Redirect on successful registration
+            window.location.href = result.redirect ;
+
+        } catch (error) {
+            console.error("Registration error:", error);
+            errorBox.textContent = "Network error. Please try again.";
+            errorBox.style.display = "block";
+        }
+    });
+});
+</script>
 
 </body>
 </html>

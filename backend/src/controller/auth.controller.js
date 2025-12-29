@@ -42,8 +42,7 @@ export async function registerUser(req, res) {
 
     // 5. Send response
     res.cookie("token", token);
-    res.status(201).redirect("/api/home")
-    return res.status(200).json({success:"True", redirect:"/api/user/login"})
+    res.status(201).json({ success: true, redirect: "/api/user/login" });
   } catch (error) {
     console.error(error);
     return res.status(500).render("serverside",{
@@ -134,7 +133,7 @@ export async function registerfoodPartner(req, res) {
     });
 
     res.cookie("token", token);
-    res.status(201).redirect("/api/foodpartner/login")
+    res.status(201).json({ success: true, redirect: "/api/foodpartner/login" });
   } catch (error) {
     return res.status(500).render("serverside",{
       statusCode: 500,
