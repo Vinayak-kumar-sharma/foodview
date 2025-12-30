@@ -1,52 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Upload Food Reel</title>
-<link rel="stylesheet" href="../css/item.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload Food Reel</title>
+  <link rel="stylesheet" href="/css/item.css">
 </head>
 <body>
 
 <div class="form-container">
   <h2>Upload Your Food Reel</h2>
-  
-  <form id="foodForm" action="/api/fooditem" method="POST" enctype="multipart/form-data">
-    
+
+  <form
+    id="foodForm"
+    action="/api/fooditem"
+    method="POST"
+    enctype="multipart/form-data"
+  >
+
     <!-- Food Name -->
     <label for="name">Food Name</label>
-    <input type="text" id="name" name="name" placeholder="e.g., Spicy Momos" required>
+    <input
+      type="text"
+      id="name"
+      name="name"
+      placeholder="e.g., Spicy Momos"
+      required
+    >
 
     <!-- Video Upload -->
     <label for="video">Upload Video</label>
-    <input type="file" id="video" name="video" accept="video/*" required>
-    
+    <input
+      type="file"
+      id="video"
+      name="video"
+      accept="video/*"
+      required
+    >
+
     <!-- Video Preview -->
     <div class="video-preview" id="videoPreview">
       <p>No video selected</p>
     </div>
 
+    <!-- Remove Video Button -->
+    <button
+      type="button"
+      id="removeVideoBtn"
+      class="remove-video"
+      style="display:none;"
+    >
+      Remove Video
+    </button>
+
     <!-- Description -->
     <label for="description">Description</label>
-    <textarea id="description" name="description" rows="4" placeholder="Enter a short description..." required></textarea>
+    <textarea
+      id="description"
+      name="description"
+      rows="4"
+      placeholder="Enter a short description..."
+      required
+    ></textarea>
 
-    <button type="submit">Submit</button>
+    <!-- Submit -->
+    <button type="submit" id="submitBtn">Submit</button>
+    <p id="uploadStatus" style="display:none;">
+      Uploading video, please wait...
+    </p>
+
   </form>
 </div>
 
+<!-- =======================
+     FINAL WORKING JAVASCRIPT
+======================== -->
 <script>
+document.addEventListener('DOMContentLoaded', () => {
+
   const videoInput = document.getElementById('video');
   const videoPreview = document.getElementById('videoPreview');
+  const removeBtn = document.getElementById('removeVideoBtn');
+  const form = document.getElementById('foodForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const uploadStatus = document.getElementById('uploadStatus');
 
+  let previewURL = null;
+
+  /* Video preview */
   videoInput.addEventListener('change', () => {
     const file = videoInput.files[0];
-    if(file){
-      const url = URL.createObjectURL(file);
-      videoPreview.innerHTML = `<video src="${url}" controls width="100%" autoplay muted loop></video>`;
-    } else {
-      videoPreview.innerHTML = '<p>No video selected</p>';
+    if (!file) return;
+
+    if (!file.type.startsWith('video/')) {
+      alert('Please select a valid video file.');
+      videoInput.value = '';
+      return;
     }
+
+    if (previewURL) URL.revokeObjectURL(previewURL);
+    previewURL = URL.createObjectURL(file);
+
+    videoPreview.innerHTML = `
+      <video src="${previewURL}" controls muted style="width:100%;max-height:300px;"></video>
+    `;
+    removeBtn.style.display = 'inline-block';
   });
+
+  /* Remove video */
+  removeBtn.addEventListener('click', () => {
+    if (previewURL) URL.revokeObjectURL(previewURL);
+    previewURL = null;
+    videoInput.value = '';
+    videoPreview.innerHTML = '<p>No video selected</p>';
+    removeBtn.style.display = 'none';
+  });
+
+  /* Upload state (IMPORTANT: no preventDefault) */
+  form.addEventListener('submit', () => {
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Uploading...';
+    uploadStatus.style.display = 'block';
+  });
+
+});
 </script>
 
 </body>

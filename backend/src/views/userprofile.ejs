@@ -49,7 +49,8 @@
   <% if (savedReels.length > 0) { %>
     <div class="saved-grid">
       <% savedReels.forEach(reel => { %>
-        <a href="/reel/<%= reel.id %>" class="saved-card">
+        <!-- Updated href to point to home with targetReelId -->
+        <a href="/api/home?reelId=<%= reel.id %>" class="saved-card">
 
           <!-- Video preview -->
           <div class="video-section">
@@ -64,7 +65,7 @@
 
               <!-- Icons on Right (Stacked Vertically) -->
               <div class="saved-icons">
-                <div> <img src="/icons/Likewhite.svg" alt="likes"></div>
+                <div><img src="/icons/Likewhite.svg" alt="likes"></div>
                 <div class="icon-count"><%= reel.likes_count %></div>
                 <div><img src="/icons/commentwhite.svg" alt="comments"></div>
                 <div class="icon-count"><%= reel.comments_count %></div>
@@ -80,6 +81,7 @@
     <div class="empty">No saved reels yet.</div>
   <% } %>
 </div>
+
   <!-- Comments -->
   <div id="comments" class="tab-panel">
   <% if (comments.length > 0) { %>

@@ -144,18 +144,6 @@ export async function registerfoodPartner(req, res) {
 export async function getpartnerLogin(req, res){
   res.render("foodpartnerLogin")
 }
-export async function logoutfoodPartner(req, res){
-  try{
-    res.clearCookie("token")
-    res.status(200).redirect("/")
-  }
-  catch(err){
-    return res.status(500).render("serverside",{
-      statusCode: 500,
-      message: "Something broke on our end."
-    })
-  }
-}
 export async function loginfoodPartner(req, res){
   try {
     const {password, email} = req.body
@@ -177,9 +165,22 @@ export async function loginfoodPartner(req, res){
     const token = jwt.sign({userId:user.id},process.env.JWT_KEY,{expiresIn:"1d"})
 
     res.cookie("token", token)
-    return res.status(200).json({ success: true, redirect: "/api/store" })
+    return res.status(200).redirect("/api/store")
   } catch (error) {
     console.error(error)
+    return res.status(500).render("serverside",{
+      statusCode: 500,
+      message: "Something broke on our end."
+    })
+  }
+}
+
+export async function logoutfoodPartner(req, res){
+  try{
+    res.clearCookie("token")
+    res.status(200).redirect("/")
+  }
+  catch(err){
     return res.status(500).render("serverside",{
       statusCode: 500,
       message: "Something broke on our end."

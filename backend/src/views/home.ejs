@@ -31,11 +31,31 @@
     </div>
 
     <!-- ICONS -->
-    <div class="right-icons">
+    <!-- <div class="right-icons">
       <button class="like-btn"> <img src="/icons/heartwhite.svg" alt="like"></button>
       <button class="comment-btn"> <img src="/icons/commentwhite.svg" alt="comment"></button>
       <button class="save-btn"> <img src="/icons/savewhite.svg" alt="save"></button>
-    </div>
+    </div> -->
+    <!-- ICONS -->
+<div class="right-icons">
+
+  <button class="like-btn">
+    <img src="/icons/heartwhite.svg" alt="like">
+    <span class="count"><%= reel.likes_count %></span>
+  </button>
+
+  <button class="comment-btn">
+    <img src="/icons/commentwhite.svg" alt="comment">
+    <span class="count"><%= reel.comments_count %></span>
+  </button>
+
+  <button class="save-btn">
+    <img src="/icons/savewhite.svg" alt="save">
+    <span class="count"><%= reel.saves_count %></span>
+  </button>
+
+</div>
+
 
     <!-- MOBILE COMMENT SHEET -->
     <div class="comment-sheet">
@@ -80,6 +100,20 @@
 </div>
 
 </body>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const targetReelId = "<%= targetReelId %>";
+    if (!targetReelId) return;
 
+    const reel = document.querySelector(`.reel[data-reel-id="${targetReelId}"]`);
+    if (reel) {
+        reel.scrollIntoView({ behavior: "smooth", block: "center" });
+
+        const video = reel.querySelector("video");
+        if (video) video.play().catch(() => {});
+    }
+});
+
+</script>
 <script src="/js/script.js"></script>
 </html>

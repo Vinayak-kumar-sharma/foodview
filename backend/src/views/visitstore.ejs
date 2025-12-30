@@ -4,7 +4,62 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visit Store</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
     <link rel="stylesheet" href="/css/store.css">
+    <style>
+      /* Three dots menu styles */
+      .video-item {
+        position: relative;
+      }
+
+      .menu-btn {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        font-size: 22px;
+        cursor: pointer;
+        user-select: none;
+        z-index: 5;
+      }
+
+      /* Dropdown container */
+.dropdown {
+  display: none;
+  position: absolute;
+  top: 28px;
+  right: 8px;
+  background: #222;          /* Dark minimal background */
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  min-width: 40px;           /* Small square box */
+  padding: 4px 0;            /* Vertical padding */
+  z-index: 10;
+  text-align: center;        /* Center the icon horizontally */
+}
+
+/* Dropdown links (only icons) */
+.dropdown a {
+  display: block;
+  padding: 6px 0;            /* Vertical spacing around icon */
+  color: #fff;               /* Icon color */
+  font-size: 18px;           /* Adjust icon size */
+  text-decoration: none;
+  transition: background 0.2s;
+  width: 100%;
+}
+
+/* Hover effect */
+.dropdown a:hover {
+  background: #333;           /* Slightly darker hover */
+  border-radius: 4px;
+}
+
+/* If using Font Awesome icon inside <a> */
+.dropdown a i {
+  vertical-align: middle;     /* Vertically center the icon */
+}
+
+    </style>
 </head>
 <body>
 
@@ -12,16 +67,17 @@
 
     <!-- Top bar: profile + actions -->
     <div class="top-bar">
-    <div class="profile-info">
-        <img src="../images/pic.jpeg" alt="Profile Picture" class="profile-pic">
-        <h2 class="partner-name">@FoodPartnerName</h2>
+        <div class="profile-info">
+            <img src="../images/pic.jpeg" alt="Profile Picture" class="profile-pic">
+            <h2 class="partner-name">@FoodPartnerName</h2>
+        </div>
+        <div class="actions">
+            <a href="/api/home" class="action-btn">Home</a>
+            <a href="/api/fooditem" class="action-btn upload-btn">Upload</a>
+            <a href="/api/foodpartner/logout" class="action-btn logout">Logout</a>
+        </div>
     </div>
-    <div class="actions">
-        <a href="/api/home" class="action-btn">Home</a>
-        <a href="/api/fooditem" class="action-btn upload-btn">Upload</a>
-        <a href="/api/foodpartner/logout" class="action-btn logout">Logout</a>
-    </div>
-</div>
+
     <!-- Stats section -->
     <div class="stats-section">
         <div class="stat">
@@ -38,30 +94,40 @@
 
     <!-- Video grid section -->
     <div class="video-grid">
-    <% if (video.length === 0) { %>
-        <p class="no-videos">No videos uploaded yet.</p>
-    <% } else { %>
-        <% video.forEach(v => { %>
-            <div class="video-item">
-                <video 
-                    src="<%= v.video %>" 
-                    autoplay 
-                    muted 
-                    loop 
-                    playsinline
-                    preload="metadata"
-                    class="reel-video"
-                ></video>
-                <div class="video-info">
-                    <p><%= v.description %></p>
+        <% if (video.length === 0) { %>
+            <p class="no-videos">No videos uploaded yet.</p>
+        <% } else { %>
+            <% video.forEach(v => { %>
+                <div class="video-item">
+                    <video 
+                        src="<%= v.video %>" 
+                        autoplay 
+                        muted 
+                        loop 
+                        playsinline
+                        preload="metadata"
+                        class="reel-video"
+                    ></video>
+
+                    <!-- Three dots menu -->
+                    <div class="menu-btn">⋮</div>
+                    <div class="dropdown">
+                        <a href="/api/foodpartner/edit/<%= v.id %>">
+                            <i class="fa-solid fa-pencil"></i>
+                        </a>
+                        <!-- Future: <a href="#">Share</a> -->
+                    </div>
+
+                    <div class="video-info">
+                        <p><%= v.description %></p>
+                    </div>
                 </div>
-            </div>
-        <% }) %>
-    <% } %>
-</div>
-
+            <% }) %>
+        <% } %>
+    </div>
 
 </div>
+
 <script>
 document.addEventListener("DOMContentLoaded", () => {
     const videos = document.querySelectorAll(".reel-video");
@@ -77,6 +143,27 @@ document.addEventListener("DOMContentLoaded", () => {
             video.muted = !video.muted;
             video.volume = 1;
         });
+    });
+
+    // Dropdown menu toggle
+    document.querySelectorAll('.video-item').forEach(item => {
+        const btn = item.querySelector('.menu-btn');
+        const dropdown = item.querySelector('.dropdown');
+
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            // Close other dropdowns
+            document.querySelectorAll('.dropdown').forEach(d => {
+                if(d !== dropdown) d.style.display = 'none';
+            });
+            // Toggle current
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        });
+    });
+
+    // Close dropdown if click outside
+    document.addEventListener('click', () => {
+        document.querySelectorAll('.dropdown').forEach(d => d.style.display = 'none');
     });
 });
 </script>
