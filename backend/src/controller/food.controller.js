@@ -15,7 +15,7 @@ export async function foodItem(req, res) {
   }
   const uploadResult = await uploadFile(req.file.buffer,uuid())
   
-  const newfoodItem = await pool.query(`INSERT INTO fooditem (name, description, video, foodpartner_id) VALUES ($1,$2,$3,$4) RETURNING *`,[name, description, uploadResult.url, foodpartnerId])
+  const newfoodItem = await pool.query(`INSERT INTO fooditem (name, description, video,video_file_id ,foodpartner_id) VALUES ($1,$2,$3,$4,$5) RETURNING *`,[name, description, uploadResult.url, uploadResult.fileId,foodpartnerId])
   
   const newitem = newfoodItem.rows[0]
 
@@ -209,20 +209,18 @@ export async function getdishbyId(req, res) {
 export async function deletefooditembyId(req, res) {
   try {
     const reelId = req.params.id
-    const result = await pool.query("select video from fooditem where id = $1",[reelId])
+    const result = await pool.query("select video_file_id from fooditem where id = $1",[reelId])
 
     if(result.rows.length === 0){
       return res.status(404).render("clientside", { statusCode:404, message:"Page not found"})
     }
-    const videoURL = result.rows[0].video;
+    const fileId = result.rows[0].video_file_id;
 
-    // 2. Extract fileId from URL
-    const fileId = videoURL.replace("https://ik.imagekit.io/pj2x8w9ape/", "");
-
-    // 3. Delete file from ImageKit
     await imagekit.deleteFile(fileId);
+    
 
     await pool.query("delete from fooditem where id = $1",[reelId])
+
     res.status(200).json({success:true, msg:"delted successfully"})
 
   } catch (error) {
@@ -232,7 +230,7 @@ export async function deletefooditembyId(req, res) {
 }
 
 /* here it is only for the food partner */
-export async function editfooditembyID(req, res) {
+export async function geteditfooditembyID(req, res) {
   
     const reelId = req.params.id;
 
@@ -279,4 +277,28 @@ export async function editfooditembyID(req, res) {
 
     // Render EJS page
     res.render('videoed', { reel });
+}
+
+export async function updateFoodItem(req, res) {
+  try {
+    const foodItemId = req.params.id;
+    const { name, description } = req.body;
+    
+    const result = await pool.query(
+      `UPDATE fooditem
+       SET name=$1,description=$2
+       WHERE id=$3
+       RETURNING *`,
+      [name,description, foodItemId]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "Food item not found" });
+    }
+
+    res.status(200).redirect("/api/store")
+  } catch (error) {
+    console.error("Error updating food item:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 }
