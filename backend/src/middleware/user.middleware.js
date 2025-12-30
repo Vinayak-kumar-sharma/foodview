@@ -9,7 +9,7 @@ export async function authUsermiddleware(req, res, next){
               statusCode: 401,
               message: "Invalid Token"})
     }
-    const decoded = jwt.verify(token, process.env.JWT_KEY)
+    const decoded = jwt.verify(token, process.env.USER_JWT_KEY)
     req.user = {id:decoded.userId}
     next()
   } catch (error) {

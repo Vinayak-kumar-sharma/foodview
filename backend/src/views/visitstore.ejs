@@ -68,11 +68,22 @@
     <!-- Top bar: profile + actions -->
     <div class="top-bar">
         <div class="profile-info">
-            <img src="../images/pic.jpeg" alt="Profile Picture" class="profile-pic">
-            <h2 class="partner-name">@FoodPartnerName</h2>
+            <% let displayLetters='FP' ; if (partner.name) { // Split words by space or hyphen let
+                parts=partner.name.split(/[\s-]+/); displayLetters=parts.map(p=> p[0].toUpperCase()).join('').slice(0,2);
+                if (!displayLetters.match(/[A-Z]/)) {
+                displayLetters = 'FP';
+                }
+                }
+                %>
+                <div class="profile-pic">
+                    <%= displayLetters %>
+                </div>
+                <h2 class="partner-name">@<%= partner.name %>
+                </h2>
         </div>
+
+
         <div class="actions">
-            <a href="/api/home" class="action-btn">Home</a>
             <a href="/api/fooditem" class="action-btn upload-btn">Upload</a>
             <a href="/api/foodpartner/logout" class="action-btn logout">Logout</a>
         </div>

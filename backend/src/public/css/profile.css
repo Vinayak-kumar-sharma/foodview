@@ -1,3 +1,4 @@
+/* ===== GLOBAL ===== */
 * {
   margin: 0;
   padding: 0;
@@ -10,57 +11,63 @@ body {
   color: #fff;
 }
 
-/* PROFILE HEADER - MOBILE-FIRST LEFT-RIGHT */
+/* ===== PROFILE HEADER ===== */
 .profile-header {
   display: flex;
-  justify-content: space-between; /* left: user info, right: actions */
-  align-items: center;            /* vertically center all items */
+  justify-content: space-between;
+  align-items: center;
   padding: 12px 16px;
   background-color: #000;
-  color: #fff;
   border-bottom: 1px solid #222;
   position: sticky;
   top: 0;
   z-index: 100;
 }
 
-/* LEFT: USER INFO */
+/* ===== USER INFO ===== */
 .user-info {
   display: flex;
-  align-items: center;   /* vertically center avatar + details */
-  gap: 10px;
+  align-items: center;
+  gap: 4px;
 }
 
 .profile-pic {
-  width: 40px;
-  height: 40px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
-  object-fit: cover;
-  border: 8px dashed #fff;
+  background-color: #6c63ff; /* randomizable */
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 24px;
+  margin-right: 15px;
+  flex-shrink: 0;
+  border: 9px dashed white;
 }
 
-/* User details: name + email stacked vertically */
 .user-details {
   display: flex;
   flex-direction: column;
-  line-height: 1.2;
 }
 
 .username {
-  font-size: 14px;
-  font-weight: 600;
+  font-weight: bold;
+  font-size: 18px;
 }
 
 .email {
-  font-size: 11px;
-  color: #aaa;
+  font-size: 14px;
+  color: #555;
 }
 
-/* RIGHT: ACTIONS */
+/* ===== HEADER ACTIONS ===== */
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 2px;
+  margin: 2px;
 }
 
 .header-link,
@@ -68,14 +75,14 @@ body {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   color: #fff;
   text-decoration: none;
   background: none;
   border: none;
   cursor: pointer;
-  padding: 6px 10px;
+  padding: 6px 12px;
   border-radius: 6px;
   transition: background 0.3s;
 }
@@ -86,41 +93,13 @@ body {
 
 .logout-btn:hover {
   background: #ff4500;
-  color: #fff;
 }
 
 /* ICONS */
 .icon {
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
   object-fit: contain;
-}
-
-/* ===== TABLET / DESKTOP ===== */
-@media (min-width: 600px) {
-  .profile-pic {
-    width: 50px;
-    height: 50px;
-  }
-
-  .username {
-    font-size: 16px;
-  }
-
-  .email {
-    font-size: 13px;
-  }
-
-  .header-link,
-  .logout-btn {
-    font-size: 14px;
-    padding: 6px 12px;
-  }
-
-  .icon {
-    width: 16px;
-    height: 16px;
-  }
 }
 
 /* ===== TABS ===== */
@@ -145,7 +124,6 @@ body {
   border-bottom: 2px solid #ff4500;
 }
 
-/* ===== TAB CONTENT ===== */
 .tab-content {
   padding: 12px;
 }
@@ -159,14 +137,64 @@ body {
 }
 
 /* ===== COMMENTS ===== */
-.comment-text {
-  font-size: 14px;
-  padding: 12px;
-  border-bottom: 1px solid #222;
-  color: #ddd;
+.comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
 }
 
-/* ===== SAVED VIDEOS GRID (AUTO RESPONSIVE) ===== */
+.comment-card {
+  display: flex;
+  flex-direction: column;
+  background: none;
+  padding: 0;
+  margin: 0;
+}
+
+.comment-video {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  border-radius: 10px;
+  background: #111;
+  margin-bottom: 8px;
+}
+
+.comment-reel {
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.comment-text {
+  font-size: 14px;
+  color: #ddd;
+  line-height: 1.5;
+  margin-bottom: 6px;
+  border-bottom: 1px solid #222;
+  padding-bottom: 6px;
+}
+
+.comment-time {
+  font-size: 12px;
+  color: #888;
+}
+
+.comment-card:not(:last-child) {
+  padding-bottom: 14px;
+  border-bottom: 1px solid #222;
+}
+
+/* ===== EMPTY STATE ===== */
+.empty {
+  text-align: center;
+  color: #888;
+  font-size: 14px;
+  padding: 24px 0;
+}
+
+/* ===== SAVED VIDEOS GRID ===== */
 .saved-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
@@ -174,7 +202,6 @@ body {
   padding: 12px;
 }
 
-/* ===== VIDEO CARD ===== */
 .video-section {
   position: relative;
   border-radius: 12px;
@@ -182,10 +209,9 @@ body {
   background: #111;
 }
 
-/* Vertical video handling (same as your reference page) */
 .saved-video {
   width: 100%;
-  aspect-ratio: 9 / 16;
+  aspect-ratio: 9/16;
   object-fit: cover;
   display: block;
   transition: transform 0.3s ease;
@@ -195,19 +221,6 @@ body {
   transform: scale(1.05);
 }
 
-/* ===== OVERLAY ===== */
-.saved-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  padding: 6px 10px;
-  display: flex;
-  gap: 8px;
-  background: rgba(0, 0, 0, 0.5);
-}
-
-/* ===== OVERLAY ===== */
 .saved-overlay {
   position: absolute;
   bottom: 0;
@@ -215,134 +228,66 @@ body {
   width: 100%;
   padding: 8px 10px;
   display: flex;
-  align-items: flex-end; /* anchor bottom */
+  align-items: flex-end;
   justify-content: space-between;
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.65),
-    rgba(0, 0, 0, 0)
-  );
+  background: linear-gradient(to top, rgba(0,0,0,0.65), rgba(0,0,0,0));
 }
 
-/* Icons – ABOVE title */
 .saved-icons {
   display: flex;
   flex-direction: column;
   gap: 6px;
   font-size: 11px;
   color: #fff;
-  margin-bottom: 18px; /* ⬅ push icons up */
+  margin-bottom: 18px;
 }
 
-/* Title – closest to bottom */
 .saved-title {
   font-size: 12px;
   color: #fff;
   line-height: 1.35;
   max-width: 75%;
-  margin-bottom: 2px; /* ⬅ stick to bottom */
+  margin-bottom: 2px;
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 }
+
 .icon-count {
   margin-top: 4px;
   font-size: 11px;
   opacity: 0.9;
-  text-align: center; /* ⬅ ensure number centers */
-}
-/* ===== COMMENTS LIST ===== */
-.comments-list {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-
-/* No card look */
-.comment-card {
-  background: none;
-  padding: 0;
-  margin: 0;
-}
-
-/* Video preview (top) */
-.comment-video {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
-  border-radius: 10px;
-  margin-bottom: 8px;
-  background: #111;
-}
-
-/* Reel / video title */
-.comment-reel {
-  font-size: 14px;
-  font-weight: 500;
-  color: #fff;
-  margin-bottom: 4px;
-}
-
-/* Comment text */
-.comment-text {
-  font-size: 14px;
-  color: #ddd;
-  line-height: 1.5;
-  margin-bottom: 6px;
-}
-
-/* Time (bottom) */
-.comment-time {
-  font-size: 12px;
-  color: #888;
-}
-
-/* Separator between comments */
-.comment-card:not(:last-child) {
-  padding-bottom: 14px;
-  border-bottom: 1px solid #222;
-}
-
-/* Empty state */
-.empty {
   text-align: center;
-  color: #888;
-  font-size: 14px;
-  padding: 24px 0;
 }
 
-/* Likes container (grid layout) */
+/* ===== LIKES GRID ===== */
 .likes-list {
   display: grid;
-  grid-template-columns: 1fr; /* mobile-first: 1 per row */
+  grid-template-columns: 1fr;
   gap: 12px;
   padding: 16px 0;
   width: 100%;
-  box-sizing: border-box;
 }
 
-/* Individual like card */
 .like-card {
   display: flex;
   flex-direction: column;
   text-decoration: none;
-  color: #fff;       /* readable on dark background */
-  background: none;  /* remove card */
+  color: #fff;
+  background: none;
   padding: 0;
   margin: 0;
-  position: relative; /* for overlay */
+  position: relative;
 }
 
-/* Video preview */
 .like-video {
   width: 100%;
-  aspect-ratio: 9 / 16; /* vertical video */
+  aspect-ratio: 9/16;
   object-fit: cover;
   border-radius: 12px;
-  background: #111;    /* fallback dark */
+  background: #111;
   display: block;
-  margin-bottom: 0;    /* overlay on video */
   transition: transform 0.3s ease;
 }
 
@@ -352,10 +297,10 @@ body {
 
 .like-overlay {
   position: absolute;
-  bottom: 6px;  /* slightly above the bottom corner */
+  bottom: 6px;
   left: 8px;
   right: 8px;
-  padding: 0;   /* remove background padding */
+  padding: 0;
   box-sizing: border-box;
 }
 
@@ -369,7 +314,6 @@ body {
   white-space: nowrap;
 }
 
-/* Time / metadata */
 .like-time {
   font-size: 11px;
   color: #888;
@@ -377,34 +321,21 @@ body {
   margin-top: 4px;
 }
 
-/* Empty state */
-.empty {
-  text-align: center;
-  color: #888;
-  font-size: 14px;
-  padding: 24px 0;
-}
-
-/* ===== Responsive columns ===== */
-
-/* Small devices: 2 columns */
+/* ===== RESPONSIVE GRID ===== */
 @media (min-width: 400px) {
   .likes-list {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-/* Tablets: 2–3 columns */
 @media (min-width: 600px) {
   .likes-list {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-/* Desktop: 3 columns */
 @media (min-width: 900px) {
   .likes-list {
     grid-template-columns: repeat(3, 1fr);
   }
 }
-

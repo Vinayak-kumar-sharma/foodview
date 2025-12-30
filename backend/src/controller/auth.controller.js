@@ -36,7 +36,7 @@ export async function registerUser(req, res) {
     const user = newUser.rows[0];
 
     // 4. Create JWT
-    const token = jwt.sign({ id: user.id }, process.env.JWT_KEY, {
+    const token = jwt.sign({ id: user.id }, process.env.USER_JWT_KEY, {
       expiresIn: "1d",
     });
 
@@ -72,7 +72,7 @@ export async function loginUser(req, res) {
       return res.status(400).json({ message: "False: Invalid password" });
     }
 
-    const token = jwt.sign({ userId: user.id }, process.env.JWT_KEY, {
+    const token = jwt.sign({ userId: user.id }, process.env.USER_JWT_KEY, {
       expiresIn: "1d",
     });
     res.cookie("token", token, {
@@ -128,7 +128,7 @@ export async function registerfoodPartner(req, res) {
 
     const foodpartner = newfoodPartner.rows[0];
 
-    const token = jwt.sign({ id: foodpartner.id }, process.env.JWT_KEY, {
+    const token = jwt.sign({ id: foodpartner.id }, process.env.PARTNER_JWT_KEY, {
       expiresIn: "1d",
     });
 
@@ -162,7 +162,7 @@ export async function loginfoodPartner(req, res){
     if(!isMatch){
       return res.status(400).json({message:" Invalid password "})
     }
-    const token = jwt.sign({userId:user.id},process.env.JWT_KEY,{expiresIn:"1d"})
+    const token = jwt.sign({userId:user.id},process.env.PARTNER_JWT_KEY,{expiresIn:"1d"})
 
     res.cookie("token", token)
     return res.status(200).redirect("/api/store")

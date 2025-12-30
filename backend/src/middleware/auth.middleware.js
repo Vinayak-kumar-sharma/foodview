@@ -9,7 +9,7 @@ async function authFoodPartnermiddleware(req, res,next){
 });
   }
   try {
-    const decoded =  jwt.verify(token, process.env.JWT_KEY)
+    const decoded =  jwt.verify(token, process.env.PARTNER_JWT_KEY)
     req.foodpartner = { id:decoded.userId }
     next()
   } catch (error) {

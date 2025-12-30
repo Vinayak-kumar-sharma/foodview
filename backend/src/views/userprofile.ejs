@@ -13,7 +13,23 @@
 <div class="profile-header">
   <!-- LEFT: USER INFO -->
   <div class="user-info">
-    <img src="/icons/userwhite.svg" alt="user" class="profile-pic">
+    <% // Remove any characters that are not letters, spaces, or hyphens const
+      cleanName=user.name.replace(/[^a-zA-Z\s-]/g, '' ).trim(); // Split by space or hyphen const
+      nameParts=cleanName.split(/[\s-]+/).filter(n=> n.length > 0);
+      // Get initials
+      let initials = '';
+      if (nameParts.length === 0) {
+      initials = '?';
+      } else if (nameParts.length === 1) {
+      initials = nameParts[0][0].toUpperCase();
+      } else {
+      initials = nameParts[0][0].toUpperCase() + nameParts[1][0].toUpperCase();
+      }
+      %>
+      <div class="profile-pic">
+        <%= initials %>
+      </div>
+
     <div class="user-details">
       <div class="username"><%= user.name %></div>
       <div class="email"><%= user.email %></div>
