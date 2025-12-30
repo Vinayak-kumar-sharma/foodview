@@ -28,52 +28,57 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
-    const form = document.getElementById("foodPartnerForm");
-    const errorBox = document.getElementById("errorBox");
+  const form = document.getElementById("foodPartnerForm");
+  const errorBox = document.getElementById("errorBox");
+  const submitBtn = form.querySelector("button[type='submit']");
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    errorBox.style.display = "none";
+    errorBox.textContent = "";
 
-      // Clear previous error
-      errorBox.style.display = "none";
-      errorBox.textContent = "";
+    const name = form.name.value.trim();
+    const email = form.email.value.trim();
+    const password = form.password.value.trim();
 
-      const name = form.name.value.trim();
-      const email = form.email.value.trim();
-      const password = form.password.value.trim();
+    if (!name || !email || !password) {
+      errorBox.textContent = "All fields are required.";
+      errorBox.style.display = "block";
+      return;
+    }
 
-      // Frontend validation
-      if (!name || !email || !password) {
-        errorBox.textContent = "All fields are required.";
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Registering...";
+
+    try {
+      const res = await fetch("/api/foodpartner/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password })
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok || !data.success) {
+        errorBox.textContent = data.message || "Something went wrong.";
         errorBox.style.display = "block";
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Register";
         return;
       }
 
-      try {
-        const res = await fetch("/api/foodpartner/register", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name, email, password })
-        });
+      window.location.href = "/api/foodpartner/login";
 
-        const data = await res.json().catch(() => ({}));
-
-        if (!res.ok) {
-          errorBox.textContent = data.message || "Something went wrong.";
-          errorBox.style.display = "block";
-          return;
-        }
-
-        // Success → redirect
-        window.location.href = "/api/foodpartner/login";
-
-      } catch (err) {
-        console.error("Fetch error:", err);
-        errorBox.textContent = "Network error. Please try again.";
-        errorBox.style.display = "block";
-      }
-    });
+    } catch (err) {
+      console.error("Fetch error:", err);
+      errorBox.textContent = "Network error. Please try again.";
+      errorBox.style.display = "block";
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Register";
+    }
   });
+});
+
 </script>
 
 </body>

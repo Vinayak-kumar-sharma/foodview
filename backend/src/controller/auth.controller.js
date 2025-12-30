@@ -110,7 +110,7 @@ export async function registerfoodPartner(req, res) {
   try {
     const { name, email, password } = req.body;
 
-    const foodPartnerexist = await pool.query("SELECT id FROM users WHERE email = $1", 
+    const foodPartnerexist = await pool.query("SELECT id FROM foodpartner WHERE email = $1", 
       [email]);
   
 
@@ -165,7 +165,8 @@ export async function loginfoodPartner(req, res){
     const token = jwt.sign({userId:user.id},process.env.PARTNER_JWT_KEY,{expiresIn:"1d"})
 
     res.cookie("token", token)
-    return res.status(200).redirect("/api/store")
+    // return res.status(200).redirect("/api/store")
+    res.status(201).json({ success: true, redirect: "/api/store" });
   } catch (error) {
     console.error(error)
     return res.status(500).render("serverside",{

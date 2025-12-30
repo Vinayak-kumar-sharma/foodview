@@ -35,54 +35,62 @@ export async function addfooditem(req, res) {
 }
 
 /* this is for the home to show all the fooditems*/
-export async function getfoodItem(req, res){
+
+export async function getfoodItem(req, res) {
   try {
     const targetReelId = req.query.reelId || null;
+    const userId = req.user.id; // assuming you store logged-in user id in session
+
     const foodItems = await pool.query(
-      `SELECT
+      `
+      SELECT
           f.id,
           f.name AS reel_name,
           f.video,
           f.description,
-
           p.id AS partner_id,
           p.name AS partner_name,
-
           COALESCE(l.likes_count, 0) AS likes_count,
           COALESCE(c.comments_count, 0) AS comments_count,
-          COALESCE(sv.saves_count, 0) AS saves_count
-
+          COALESCE(sv.saves_count, 0) AS saves_count,
+          CASE WHEN ul.user_id IS NOT NULL THEN true ELSE false END AS liked_by_user,
+          CASE WHEN us.user_id IS NOT NULL THEN true ELSE false END AS saved_by_user
       FROM fooditem f
       JOIN foodpartner p ON f.foodpartner_id = p.id
-
       LEFT JOIN (
           SELECT reel_id, COUNT(*) AS likes_count
           FROM likes
           GROUP BY reel_id
       ) l ON f.id = l.reel_id
-
       LEFT JOIN (
           SELECT reel_id, COUNT(*) AS comments_count
           FROM comments
           GROUP BY reel_id
       ) c ON f.id = c.reel_id
-
       LEFT JOIN (
           SELECT reel_id, COUNT(*) AS saves_count
           FROM usersave
           GROUP BY reel_id
       ) sv ON f.id = sv.reel_id
-
+      LEFT JOIN likes ul ON f.id = ul.reel_id AND ul.user_id = $1
+      LEFT JOIN usersave us ON f.id = us.reel_id AND us.user_id = $1
       ORDER BY f.id DESC;
-                          `)
+      `,
+      [userId]
+    );
+
     res.render("home", { reels: foodItems.rows, targetReelId });
   } catch (error) {
-    return res.status(500).render("serverside",{
+    console.error("getfoodItem error:", error);
+    return res.status(500).render("serverside", {
       statusCode: 500,
       message: "Something broke on our end."
-    })
+    });
   }
 }
+
+
+
 
 /* here this shows only selected fooditem video*/
 

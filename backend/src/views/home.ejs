@@ -17,7 +17,10 @@
 
     <!-- VIDEO -->
     <div class="video-wrapper">
-      <video src="<%= reel.video %>" autoplay muted loop class="reel-video"></video>
+      <!-- <video src=" reel.video " autoplay muted loop class="reel-video"></video> -->
+      
+      <video data-src="<%= reel.video %>" class="reel-video" muted></video>
+
     </div>
 
     <!-- INFO -->
@@ -30,31 +33,22 @@
       </a>
     </div>
 
-    <!-- ICONS -->
-    <!-- <div class="right-icons">
-      <button class="like-btn"> <img src="/icons/heartwhite.svg" alt="like"></button>
-      <button class="comment-btn"> <img src="/icons/commentwhite.svg" alt="comment"></button>
-      <button class="save-btn"> <img src="/icons/savewhite.svg" alt="save"></button>
-    </div> -->
-    <!-- ICONS -->
+    
 <div class="right-icons">
-
-  <button class="like-btn">
+  <button class="like-btn <%= reel.liked_by_user ? 'active' : '' %>">
     <img src="/icons/heartwhite.svg" alt="like">
-    <span class="count"><%= reel.likes_count %></span>
+  </button>
+
+  <button class="save-btn <%= reel.saved_by_user ? 'active' : '' %>">
+    <img src="/icons/savewhite.svg" alt="save">
   </button>
 
   <button class="comment-btn">
     <img src="/icons/commentwhite.svg" alt="comment">
-    <span class="count"><%= reel.comments_count %></span>
   </button>
-
-  <button class="save-btn">
-    <img src="/icons/savewhite.svg" alt="save">
-    <span class="count"><%= reel.saves_count %></span>
-  </button>
-
 </div>
+
+
 
 
     <!-- MOBILE COMMENT SHEET -->
@@ -114,6 +108,24 @@
     }
 });
 
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const videos = document.querySelectorAll('video[data-src]');
+
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const video = entry.target;
+                video.src = video.dataset.src; // load video
+                video.play().catch(() => {}); // autoplay
+                observer.unobserve(video); // stop observing
+            }
+        });
+    }, { threshold: 0.5 });
+
+    videos.forEach(video => observer.observe(video));
+});
 </script>
 <script src="/js/script.js"></script>
 </html>

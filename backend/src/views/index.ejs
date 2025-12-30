@@ -36,6 +36,16 @@
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("userRegisterForm");
     const errorBox = document.getElementById("errorBox");
+    const submitBtn = form.querySelector("button[type='submit']");
+
+    function sanitize(input) {
+        return input.trim().replace(/[&<>"'`=\/]/g, s => "&#" + s.charCodeAt(0) + ";");
+    }
+
+    function isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
 
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
@@ -44,16 +54,31 @@ document.addEventListener("DOMContentLoaded", () => {
         errorBox.style.display = "none";
         errorBox.textContent = "";
 
-        const name = form.name.value.trim();
-        const email = form.email.value.trim();
-        const password = form.password.value.trim();
+        let name = sanitize(form.name.value);
+        let email = sanitize(form.email.value);
+        let password = sanitize(form.password.value);
 
-        // Simple client-side validation
         if (!name || !email || !password) {
             errorBox.textContent = "All fields are required.";
             errorBox.style.display = "block";
             return;
         }
+
+        if (!isValidEmail(email)) {
+            errorBox.textContent = "Please enter a valid email address.";
+            errorBox.style.display = "block";
+            return;
+        }
+
+        if (password.length < 6) {
+            errorBox.textContent = "Password must be at least 6 characters.";
+            errorBox.style.display = "block";
+            return;
+        }
+
+        // Disable button while request is in progress
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Registering...";
 
         try {
             const response = await fetch("/api/user/register", {
@@ -70,13 +95,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-            // Redirect on successful registration
-            window.location.href = result.redirect ;
+            // Redirect on success
+            window.location.href = result.redirect;
 
         } catch (error) {
             console.error("Registration error:", error);
             errorBox.textContent = "Network error. Please try again.";
             errorBox.style.display = "block";
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Register";
         }
     });
 });

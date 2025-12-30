@@ -25,7 +25,7 @@
     </div>
 </div>
 
-<script>
+<!-- <script>
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("userLoginForm");
     const errorBox = document.getElementById("errorBox");
@@ -68,6 +68,80 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error("Fetch error:", err);
             errorBox.textContent = "Network error. Please try again.";
             errorBox.style.display = "block";
+        }
+    });
+});
+</script> -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("userLoginForm");
+    const errorBox = document.getElementById("errorBox");
+    const loginBtn = form.querySelector("button[type='submit']");
+
+    function sanitize(input) {
+        // Remove leading/trailing spaces & escape special HTML chars
+        return input.trim().replace(/[&<>"'`=\/]/g, function (s) {
+            return "&#" + s.charCodeAt(0) + ";";
+        });
+    }
+
+    function isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        // Clear previous error
+        errorBox.style.display = "none";
+        errorBox.textContent = "";
+
+        let email = sanitize(form.email.value);
+        let password = sanitize(form.password.value);
+
+        if (!email || !password) {
+            errorBox.textContent = "Email and password are required.";
+            errorBox.style.display = "block";
+            return;
+        }
+
+        if (!isValidEmail(email)) {
+            errorBox.textContent = "Please enter a valid email address.";
+            errorBox.style.display = "block";
+            return;
+        }
+
+        // Disable button while request is in progress
+        loginBtn.disabled = true;
+        loginBtn.textContent = "Logging in...";
+
+        try {
+            const res = await fetch("/api/user/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password })
+            });
+
+            const data = await res.json().catch(() => ({}));
+
+            if (!res.ok || !data.success) {
+                errorBox.textContent = data.message || "Invalid email or password.";
+                errorBox.style.display = "block";
+                return;
+            }
+
+            // Redirect on success
+            window.location.href = data.redirect;
+
+        } catch (err) {
+            console.error("Fetch error:", err);
+            errorBox.textContent = "Network error. Please try again.";
+            errorBox.style.display = "block";
+        } finally {
+            // Re-enable button
+            loginBtn.disabled = false;
+            loginBtn.textContent = "Login";
         }
     });
 });

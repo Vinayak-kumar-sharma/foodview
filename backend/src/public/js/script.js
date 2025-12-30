@@ -2,30 +2,37 @@
   document.addEventListener("click", async (e) => {
 
     // LIKE
-    if (e.target.classList.contains("like-btn")) {
-      const reel = e.target.closest(".reel");
-      const reelId = reel.dataset.reelId;
+    const likeBtn = e.target.closest(".like-btn");
+    if (likeBtn) {
+        const reel = likeBtn.closest(".reel");
+        const reelId = reel.dataset.reelId;
 
-      await fetch(`/user/${reelId}/like`, {
-        method: "POST"
-      });
+        try {
+            await fetch(`/user/${reelId}/like`, { method: "POST" });
 
-      e.target.style.color = "red";
+            // Toggle active class for visual feedback
+            likeBtn.classList.toggle("active");
+        } catch (err) {
+            console.error("Like error:", err);
+        }
     }
 
     // SAVE
-    if (e.target.classList.contains("save-btn")) {
-      const reel = e.target.closest(".reel");
-      const reelId = reel.dataset.reelId;
+    const saveBtn = e.target.closest(".save-btn");
+    if (saveBtn) {
+        const reel = saveBtn.closest(".reel");
+        const reelId = reel.dataset.reelId;
 
-      await fetch(`/user/${reelId}/save`, {
-        method: "POST"
-      });
+        try {
+            await fetch(`/user/${reelId}/save`, { method: "POST" });
 
-      e.target.textContent = "✅";
+            // Toggle active class or icon for visual feedback
+            saveBtn.classList.toggle("active");
+        } catch (err) {
+            console.error("Save error:", err);
+        }
     }
-
-  });
+});
 
     document.addEventListener("DOMContentLoaded", () => {
     const videos = document.querySelectorAll(".reel video");
