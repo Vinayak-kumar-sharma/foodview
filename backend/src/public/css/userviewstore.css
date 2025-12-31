@@ -113,3 +113,4 @@
     /* Responsive columns */
     @media (min-width: 400px) { .video-grid { grid-template-columns: repeat(2, 1fr); } }
     @media (min-width: 900px) { .video-grid { grid-template-columns: repeat(3, 1fr); } }
+

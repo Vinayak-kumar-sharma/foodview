@@ -10,10 +10,38 @@
 
   <!-- Header: Store info + Home button -->
   <div class="store-header">
-    <div class="store-info">
+    <!-- <div class="store-info">
       <div class="store-avatar"></div>
-      <div>
-        <div class="store-name"><%= partner.name %></div>
+      <div> -->
+
+<div class="store-info">
+    <% 
+        // Default initials if name is missing
+        let displayLetters = 'S'; 
+
+        if (partner.name) {
+            // Split by space or hyphen
+            let parts = partner.name.split(/[\s-]+/);
+
+            // Take first letter of each part, uppercase, then first two letters
+            displayLetters = parts.map(p => p[0].toUpperCase()).join('').slice(0, 2);
+
+            // If no valid letters, fallback
+            if (!displayLetters.match(/[A-Z]/)) {
+                displayLetters = 'S';
+            }
+        }
+    %>
+
+    <div class="store-avatar">
+        <%= displayLetters %>
+    </div>
+    <div class="store-name"><%= partner.name %></div>
+</div>
+
+
+  
+          <!-- <div class="store-name"></div> -->
         <div class="store-stats">
           <%= partner.total_meals %> Meals • <%= partner.total_likes %> Likes
         </div>
