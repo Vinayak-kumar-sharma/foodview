@@ -8,7 +8,7 @@ export async function foodItem() {
     name VARCHAR(100) NOT NULL,
     video VARCHAR(225) NOT NULL,
     description VARCHAR(225),
-    video_file_id VARCAR(100) NOT NULL,
+    video_file_id VARCHAR(100) NOT NULL,
     foodpartner_id INTEGER NOT NULL,
     CONSTRAINT fk_foodpartner
       FOREIGN KEY (foodpartner_id)
