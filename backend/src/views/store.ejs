@@ -8,44 +8,30 @@
 </head>
 <body>
 
-  <!-- Header: Store info + Home button -->
-  <div class="store-header">
-    <!-- <div class="store-info">
-      <div class="store-avatar"></div>
-      <div> -->
-
-<div class="store-info">
+<div class="store-header">
+  <div class="store-info">
     <% 
-        // Default initials if name is missing
-        let displayLetters = 'S'; 
-
-        if (partner.name) {
-            // Split by space or hyphen
-            let parts = partner.name.split(/[\s-]+/);
-
-            // Take first letter of each part, uppercase, then first two letters
-            displayLetters = parts.map(p => p[0].toUpperCase()).join('').slice(0, 2);
-
-            // If no valid letters, fallback
-            if (!displayLetters.match(/[A-Z]/)) {
-                displayLetters = 'S';
-            }
-        }
+      let displayLetters = 'S'; 
+      if (partner.name) {
+        let parts = partner.name.split(/[\s-]+/);
+        displayLetters = parts.map(p => p[0].toUpperCase()).join('').slice(0, 2);
+        if (!displayLetters.match(/[A-Z]/)) displayLetters = 'S';
+      }
     %>
 
-    <div class="store-avatar">
-        <%= displayLetters %>
-    </div>
-    <div class="store-name"><%= partner.name %></div>
-</div>
+    <div class="store-avatar"><%= displayLetters %></div>
 
-        <div class="store-stats">
-          <%= partner.total_meals %> Meals • <%= partner.total_likes %> Likes
-        </div>
+    <div class="store-details">
+      <div class="store-name"><%= partner.name %></div>
+      <div class="store-stats">
+        <%= partner.total_meals %> Meals • <%= partner.total_likes %> Likes
       </div>
     </div>
-    <a href="/api/home" class="home-btn">Home</a>
   </div>
+
+  <a href="/api/home" class="home-btn">Home</a>
+</div>
+
 
   <!-- Video Grid -->
   <% if (video.length > 0) { %>
