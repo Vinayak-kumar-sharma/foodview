@@ -120,9 +120,6 @@ export async function commentReel(req, res) {
   }
 }
 
-
-
-
 // export async function createReply (req, res){
 //   try {
 //     const userId = req.user.id;            // logged-in user

@@ -10,6 +10,4 @@ router.post("/:id/like",authUsermiddleware,likeReel)
 router.post("/:id/comment",authUsermiddleware,commentReel)
 router.get("/comments/:id",getReelComment)
 
-
-
 export default router
