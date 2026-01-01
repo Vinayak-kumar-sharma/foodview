@@ -121,10 +121,44 @@ export async function commentReel(req, res) {
 }
 
 
+
+
+// export async function createReply (req, res){
+//   try {
+//     const userId = req.user.id;            // logged-in user
+//     const { comment_id, reply } = req.body;
+
+//     // Basic validation
+//     if (!comment_id || !reply || !reply.trim()) {
+//       return res.status(400).json({ error: "Comment ID and reply text required" });
+//     }
+
+//     // Insert reply
+//     const query = `
+//       INSERT INTO replies (user_id, comment_id, reply)
+//       VALUES ($1, $2, $3)
+//       RETURNING *;
+//     `;
+//     const values = [userId, comment_id, reply];
+
+//     const result = await db.query(query, values);
+
+//     return res.status(201).json({
+//       message: "Reply created",
+//       reply: result.rows[0],
+//     });
+
+//   } catch (err) {
+//     console.error(err);
+//     return res.status(500).json({ error: "Server error" });
+//   }
+// };
+
+
 export async function getReelComment(req, res) {
   try {
     const fooditmeid = req.params.id
-    const comment = await pool.query(`select c.comment, u.name from comments as c join users as u on u.id = c.user_id where c.reel_id = $1 order by c.id desc`,[fooditmeid])
+    const comment = await pool.query(`select c.id,c.comment, u.name from comments as c join users as u on u.id = c.user_id where c.reel_id = $1 order by c.id desc`,[fooditmeid])
     res.status(200).json(comment.rows)
   } catch (error) {
     console.error(error)

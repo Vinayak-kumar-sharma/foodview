@@ -1,4 +1,4 @@
-/* ===== GLOBAL ===== */
+
 * {
   margin: 0;
   padding: 0;
@@ -63,44 +63,60 @@ body {
 }
 
 /* ===== HEADER ACTIONS ===== */
+
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 2px;
-  margin: 2px;
+  gap: 6px;
+  padding: 4px 0;
+  flex-shrink: 0;
 }
 
 .header-link,
 .logout-btn {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 6px;
-  font-size: 14px;
+  justify-content: center;
+  gap: 4px;
+
+  min-height: 32px;        /* still touch-friendly */
+  padding: 4px 8px;
+
+  font-size: 12px;         /* 🔽 smaller text */
   font-weight: 500;
+
   color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+
   text-decoration: none;
-  background: none;
-  border: none;
   cursor: pointer;
-  padding: 6px 12px;
-  border-radius: 6px;
-  transition: background 0.3s;
+  white-space: nowrap;
+
+  transition: background 0.2s ease, transform 0.1s ease;
 }
 
-.header-link:hover {
-  background: #222;
+ .logout-btn {
+  background: rgba(255, 69, 0, 0.15);
+  border-color: rgba(255, 69, 0, 0.35);
 }
 
 .logout-btn:hover {
-  background: #ff4500;
+  background: rgba(255, 69, 0, 0.3);
 }
+
+.logout-btn:active {
+  transform: scale(0.95);
+}
+
 
 /* ICONS */
 .icon {
   width: 16px;
   height: 16px;
-  object-fit: contain;
 }
+
 
 /* ===== TABS ===== */
 .tabs {
@@ -271,22 +287,19 @@ body {
 }
 
 .like-card {
-  display: flex;
-  flex-direction: column;
+  position: relative;
+  display: block;
+  border-radius: 12px;
+  overflow: hidden;
   text-decoration: none;
   color: #fff;
-  background: none;
-  padding: 0;
-  margin: 0;
-  position: relative;
+  background: #111;
 }
 
 .like-video {
   width: 100%;
   aspect-ratio: 9/16;
   object-fit: cover;
-  border-radius: 12px;
-  background: #111;
   display: block;
   transition: transform 0.3s ease;
 }
@@ -295,40 +308,42 @@ body {
   transform: scale(1.03);
 }
 
+/* Overlay container at bottom of video */
 .like-overlay {
   position: absolute;
-  bottom: 6px;
-  left: 8px;
-  right: 8px;
-  padding: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 6px 10px;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
   box-sizing: border-box;
 }
 
+/* Video title overlay */
 .like-title {
-  font-size: 12px;
+  font-size: 0.9rem;
+  font-weight: 500;
   color: #fff;
-  font-weight: normal;
   line-height: 1.2;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* allow 2 lines */
+  -webkit-box-orient: vertical;
+  word-break: break-word;
 }
 
+/* Video time under title */
 .like-time {
-  font-size: 11px;
-  color: #888;
-  text-align: left;
-  margin-top: 4px;
+  font-size: 0.75rem;
+  color: #ccc;
 }
 
-/* ===== RESPONSIVE GRID ===== */
+/* ===== Responsive Grid ===== */
 @media (min-width: 400px) {
-  .likes-list {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 600px) {
   .likes-list {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -337,5 +352,20 @@ body {
 @media (min-width: 900px) {
   .likes-list {
     grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Mobile adjustments */
+@media (max-width: 400px) {
+  .like-overlay {
+    padding: 4px 6px;
+  }
+
+  .like-title {
+    font-size: 0.8rem;
+  }
+
+  .like-time {
+    font-size: 0.7rem;
   }
 }

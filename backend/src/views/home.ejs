@@ -10,7 +10,7 @@
 
 <body>
 
-    <div class="reels-container">
+<div class="reels-container">
 
 <% reels.forEach(reel => { %>
   <div class="reel" data-reel-id="<%= reel.id %>">
@@ -29,7 +29,7 @@
       <p><%= reel.description %></p>
 
       <a href="/api/store/<%= reel.partner_id %>">
-        <button><%= reel.partner_name %> Store</button>
+        <button>🏬 <%= reel.partner_name %> Store</button>
       </a>
     </div>
 
@@ -50,7 +50,6 @@
 
 
 
-
     <!-- MOBILE COMMENT SHEET -->
     <div class="comment-sheet">
 
@@ -60,7 +59,7 @@
       </div>
 
       <div class="comment-list">
-        <!-- comments injected here -->
+     <!-- comments appear here -->
       </div>
 
       <form class="comment-form">
@@ -73,14 +72,22 @@
         <button type="submit">Post</button>
       </form>
 
-    </div>
+    </div> 
 
   </div>
 <% }) %>
 
 </div>
 
-    
+
+
+
+
+
+
+
+
+
     <!-- FIXED FULL-WIDTH BOTTOM NAV -->
     <div class="bottom-nav">
     <a href="/api/home" class="nav-item">
@@ -92,8 +99,8 @@
         <p>Saved</p>
     </a>
 </div>
-
 </body>
+
 <script>
   document.addEventListener("DOMContentLoaded", () => {
     const targetReelId = "<%= targetReelId %>";
@@ -109,6 +116,7 @@
 });
 
 </script>
+
 <script>
   document.addEventListener("DOMContentLoaded", () => {
     const videos = document.querySelectorAll('video[data-src]');
@@ -127,5 +135,7 @@
     videos.forEach(video => observer.observe(video));
 });
 </script>
+
+
 <script src="/js/script.js"></script>
 </html>

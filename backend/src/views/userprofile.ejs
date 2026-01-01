@@ -58,7 +58,6 @@
   <button class="tab-btn" data-tab="replies">Replies</button>
 </div>
 
-
 <div class="tab-content">
   <!-- Saved Reels -->
 <div id="saved" class="tab-panel active">
@@ -133,29 +132,25 @@
     <div class="empty">No comments yet.</div>
   <% } %>
 </div>
+
   <!-- Likes -->
-  <div id="likes" class="tab-panel">
+<div id="likes" class="tab-panel">
   <% if (likes.length > 0) { %>
     <div class="likes-list">
       <% likes.forEach(like => { %>
-        <!-- current route is not working need to make it working -->
-        <!-- <a href="/api/home?reelId= like.id" class="like-card">  -->
-
+        <a href="/api/home?reelId=<%= like.id %>" class="like-card">
           <!-- Video preview -->
           <video src="<%= like.video %>" muted loop class="like-video"></video>
 
-          <!-- Video title / name -->
+          <!-- Overlay container for title and optional time -->
           <div class="like-overlay">
             <div class="like-title"><strong><%= like.name %></strong></div>
+            <% if (like.created_at) { %>
+              <div class="like-time">
+                <%= new Date(like.created_at).toLocaleString() %>
+              </div>
+            <% } %>
           </div>
-          
-          <!-- Optional: like time if you track it -->
-          <% if (like.created_at) { %>
-            <div class="like-time">
-              <%= new Date(like.created_at).toLocaleString() %>
-            </div>
-          <% } %>
-
         </a>
       <% }) %>
     </div>
@@ -163,6 +158,7 @@
     <div class="empty">No likes yet.</div>
   <% } %>
 </div>
+
 
 <!-- Replies -->
 <div id="replies" class="tab-panel">

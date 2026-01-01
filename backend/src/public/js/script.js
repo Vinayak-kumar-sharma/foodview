@@ -34,69 +34,98 @@
     }
 });
 
-    document.addEventListener("DOMContentLoaded", () => {
-    const videos = document.querySelectorAll(".reel video");
+document.addEventListener("DOMContentLoaded", () => {
+  const videos = document.querySelectorAll(".reel video");
 
-    // Mute all videos initially
-    videos.forEach(video => video.muted = true);
+  // Mute all videos initially
+  videos.forEach(video => {
+    video.muted = true;
 
-    // Intersection Observer for handling video play/pause on scroll
-    const options = {
-        root: null,  // viewport
-        rootMargin: "0px",
-        threshold: 0.6  // 60% visible to start video
-    };
+    let tapCount = 0;
+    let tapTimer = null;
 
-    const handleIntersect = (entries) => {
-        entries.forEach(entry => {
-            const video = entry.target;
-            if (entry.isIntersecting) {
-                // Play the video
-                video.play().catch(err => console.log("Autoplay blocked:", err));
-                // Unmute the active video
-                video.muted = false;
+    // SINGLE TAP = Play / Pause
+    // DOUBLE TAP = Mute / Unmute
+    video.addEventListener("click", () => {
+      tapCount++;
+      if (tapCount === 1) {
+  tapTimer = setTimeout(() => {
+    if (video.paused) {
+      video.play().catch(() => {});
+      showFeedback(video, "▶️"); // play
+    } else {
+      video.pause();
+      showFeedback(video, "⏸️"); // pause
+    }
+    tapCount = 0;
+  }, 250);
+}
 
-                // Add tap-to-toggle audio
-                video.addEventListener("click", toggleMute);
-            } else {
-                // Pause video and mute it
-                video.pause();
-                video.muted = true;
+if (tapCount === 2) {
+  clearTimeout(tapTimer);
+  video.muted = !video.muted;
+  showFeedback(video, video.muted ? "🔇" : "🔊");
+  tapCount = 0;
+}
 
-                // Remove tap-to-toggle audio
-                video.removeEventListener("click", toggleMute);
-            }
-        });
-    };
+    });
+  });
 
-    const toggleMute = (event) => {
-        const video = event.target;
-        video.muted = !video.muted;  // toggle mute/unmute
-    };
+  // Intersection Observer for autoplay on scroll
+  const options = {
+    root: null,
+    rootMargin: "0px",
+    threshold: 0.6
+  };
 
-    const observer = new IntersectionObserver(handleIntersect, options);
+  const handleIntersect = (entries) => {
+    entries.forEach(entry => {
+      const video = entry.target;
 
-    // Observe each video
-    videos.forEach(video => observer.observe(video));
+      if (entry.isIntersecting) {
+        video.play().catch(() => {});
+      } else {
+        video.pause();
+      }
+    });
+  };
 
-    // Scroll debounce logic to smooth out video skipping on scroll
-    let isScrolling = false;
-    let scrollTimeout;
+  const observer = new IntersectionObserver(handleIntersect, options);
 
-    const debounceScroll = () => {
-        if (isScrolling) return;
+  videos.forEach(video => observer.observe(video));
 
-        isScrolling = true;
+  // Optional scroll debounce (kept from your code)
+  let isScrolling = false;
 
-        // After a delay (to let scrolling finish), start the scroll event
-        scrollTimeout = setTimeout(() => {
-            isScrolling = false;
-        }, 100);  // adjust timeout as needed for smoothness
-    };
+  const debounceScroll = () => {
+    if (isScrolling) return;
+    isScrolling = true;
 
-    // Add scroll listener with debounce
-    document.querySelector('.reels-container').addEventListener('scroll', debounceScroll);
+    setTimeout(() => {
+      isScrolling = false;
+    }, 100);
+  };
+
+  document
+    .querySelector(".reels-container")
+    ?.addEventListener("scroll", debounceScroll);
 });
+function showFeedback(video, text) {
+  let feedback = video.parentElement.querySelector(".video-feedback");
+  if (!feedback) {
+    feedback = document.createElement("div");
+    feedback.className = "video-feedback";
+    video.parentElement.appendChild(feedback);
+  }
+  feedback.textContent = text;
+  feedback.classList.add("show");
+
+  setTimeout(() => {
+    feedback.classList.remove("show");
+  }, 700); // visible for 0.7s
+}
+
+
 
 /* for the === comments only === */
 
@@ -157,6 +186,7 @@ document.querySelectorAll(".close-comment").forEach(btn => {
     container.classList.remove("lock-scroll");
   });
 });
+
 document.querySelector(".reels-container").addEventListener(
   "touchmove",
   (e) => {
